@@ -1,5 +1,6 @@
 const express = require('express');
 const connect = require("./mongoDB");
+const cors = require("cors")
 
 const usersRouter = require('./routers/users.router');
 const seriesRouter = require('./routers/series.router');
@@ -8,6 +9,7 @@ const watchedRouter = require('./routers/watched.router');
 
 const app = express();
 app.use(express.json());
+app.use(cors())
 
 app.use("/users", usersRouter);
 app.use("/series", seriesRouter);

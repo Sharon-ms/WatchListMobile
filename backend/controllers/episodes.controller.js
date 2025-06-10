@@ -1,4 +1,4 @@
-const usersepisodesModelModel = require('../models/episodes.model');
+const episodesModel = require('../models/episodes.model');
 
 async function addEpisode(req, res) {
     try {

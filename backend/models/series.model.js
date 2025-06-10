@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const seriesScheme = mongoose.Schema({
     "title": String,
     "image": String,
-    "genre": String,
+    "genre": [String],
     "year": String,
     "seasonsAmount": Number
 })
