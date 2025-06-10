@@ -1,0 +1,24 @@
+{
+    "title": "a",
+    "image": "a",
+    "genre": "a",
+    "year": "a",
+    "seasonsAmount": 0
+}
+
+{
+    "name": "b",
+    "userName": "b",
+    "password": "b"
+}
+
+{
+    "title": "c",
+    "seasonNum": 0,
+    "episodeNum": 0,
+}
+
+{
+    "userName": "d",
+    "episodeID": mongoose.Types.ObjectId,
+}
