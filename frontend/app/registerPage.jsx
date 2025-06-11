@@ -6,20 +6,27 @@ import { SafeAreaView, TextInput, Button, Alert } from "react-native";
 export default function registerPage(){
     const router = useRouter()
     const [newUser, setNewUser] = useState({"name":"", "userName":"", "password":""})
-
+    //http://192.168.150.128:3000/users
     async function addUser(user) {
         try{
-            const res = await axios.post(`http://192.168.150.128:3000/users`, user);
-            Alert.alert('Success', 'User created successfully!')
+            const hasUser = await axios.get(`http://192.168.150.128:3000/users/${user.userName}`);
+            Alert.alert("oops", "this username already in use");
+            return;
         }catch(err){
-            if(err.response){
-                Alert.alert("Error", err.response.data.message || "Sign up failed")
+            if(err.response?.status === 404){
+                try{
+                    const res = await axios.post(`http://192.168.150.128:3000/users`, user);
+                    Alert.alert("Success", "user create")
+                } catch(createErr){
+                    Alert.alert("Error", "sign up failed")
+                }
             }
             else{
-                Alert.alert("Error", "connection error")
+                Alert.alert("Error", err.response?.data.message || "connection failed")
             }
         }
     }
+
 
     return(
         <SafeAreaView>
@@ -39,7 +46,10 @@ export default function registerPage(){
             />
 
             <Button title="sign up"
-            onPress={()=>addUser(newUser)}
+            onPress={async()=>{
+                await addUser(newUser)
+            }
+            }
             />
         </SafeAreaView>
     )
