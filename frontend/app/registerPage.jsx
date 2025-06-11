@@ -1,0 +1,46 @@
+import axios from "axios";
+import { useRouter } from "expo-router";
+import { useState } from "react";
+import { SafeAreaView, TextInput, Button, Alert } from "react-native";
+
+export default function registerPage(){
+    const router = useRouter()
+    const [newUser, setNewUser] = useState({"name":"", "userName":"", "password":""})
+
+    async function addUser(user) {
+        try{
+            const res = await axios.post(`http://192.168.150.128:3000/users`, user);
+            Alert.alert('Success', 'User created successfully!')
+        }catch(err){
+            if(err.response){
+                Alert.alert("Error", err.response.data.message || "Sign up failed")
+            }
+            else{
+                Alert.alert("Error", "connection error")
+            }
+        }
+    }
+
+    return(
+        <SafeAreaView>
+            <TextInput placeholder="name"
+            value={newUser.name}
+            onChangeText={(text)=> setNewUser(prev=> ({...prev, name: text}))}
+            />
+
+            <TextInput placeholder="user name"
+            value={newUser.userName}
+            onChangeText={(text)=> setNewUser(prev=> ({...prev, userName: text}))}
+            />
+
+            <TextInput placeholder="password"
+            value={newUser.password}
+            onChangeText={(text)=> setNewUser(prev=> ({...prev, password: text}))}
+            />
+
+            <Button title="sign up"
+            onPress={()=>addUser(newUser)}
+            />
+        </SafeAreaView>
+    )
+}

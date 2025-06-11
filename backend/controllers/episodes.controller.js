@@ -7,7 +7,7 @@ async function addEpisode(req, res) {
         res.status(200).send("episode added successfuly");
     }
     catch (err) {
-        res.status(500).send(err.mesage);
+        res.status(500).send(err.message);
     }
 };
 
@@ -17,7 +17,7 @@ async function getAllEpisodes(req, res) {
         res.status(200).send(result);
     }
     catch (err) {
-        res.status(500).send(err.mesage);
+        res.status(500).send(err.message);
     }
 };
 

@@ -7,7 +7,7 @@ async function sighnUp(req, res) {
         res.status(200).send("sighn up successfuly");
     }
     catch (err) {
-        res.status(500).send(err.mesage);
+        res.status(500).send(err.message);
     }
 };
 
@@ -17,11 +17,29 @@ async function getAllUsers(req, res) {
         res.status(200).send(result);
     }
     catch (err) {
-        res.status(500).send(err.mesage);
+        res.status(500).send(err.message);
     }
 };
 
+async function getUserById(req, res) {
+    try{
+        const {userName} = req.params;
+        const result = await usersModel.findOne({userName: userName});
+        if(!result){
+            res.status(404).send("user dosn't exist")
+        }
+        else{
+            res.status(200).send(result)
+        }
+    }
+    catch(err){
+        res.status(500).send(err.message);
+    }
+    
+}
+
 module.exports = {
     sighnUp,
-    getAllUsers
+    getAllUsers,
+    getUserById
 }

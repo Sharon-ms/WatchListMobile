@@ -7,7 +7,7 @@ async function addSeries(req, res) {
         res.status(200).send("series added successfuly");
     }
     catch (err) {
-        res.status(500).send(err.mesage);
+        res.status(500).send(err.message);
     }
 };
 
@@ -17,7 +17,7 @@ async function getAllSeries(req, res) {
         res.status(200).send(result);
     }
     catch (err) {
-        res.status(500).send(err.mesage);
+        res.status(500).send(err.message);
     }
 };
 

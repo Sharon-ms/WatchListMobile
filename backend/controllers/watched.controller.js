@@ -7,7 +7,7 @@ async function markAsWatched(req, res) {
         res.status(200).send("mark as watched successfuly");
     }
     catch (err) {
-        res.status(500).send(err.mesage);
+        res.status(500).send(err.message);
     }
 };
 
@@ -17,7 +17,7 @@ async function getAllWatched(req, res) {
         res.status(200).send(result);
     }
     catch (err) {
-        res.status(500).send(err.mesage);
+        res.status(500).send(err.message);
     }
 };
 
@@ -28,7 +28,7 @@ async function getWatchedOfUser(req, res){
         res.status(200).send(result)
     }
     catch (err) {
-        res.status(500).send(err.mesage);
+        res.status(500).send(err.message);
     }
 
 }
