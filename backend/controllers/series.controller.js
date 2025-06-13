@@ -21,7 +21,40 @@ async function getAllSeries(req, res) {
     }
 };
 
+async function getSeriesByTitle(req, res) {
+    try{
+        const {title} = req.params;
+        const result = await seriesModel.find({title: title});
+        if(result.length === 0){
+            res.status(404).send("couldn't find a series whith that name")
+        }
+        res.status(200).send(result);
+    }catch(err){
+        res.status(500).send(err.message);
+    }
+}
+
+async function updateSeries(req, res) {
+    try{
+        const {id} = req.params;
+        const body = req.body;
+        const seriesToUpdate = await seriesModel.findOneAndUpdate(
+            {_id: id},
+            {$set: body},
+            {new: true}
+        )
+        if(!seriesToUpdate){
+           return res.status(404).send("series not found")
+        }
+        res.status(200).send("series updeted")
+    }catch(err){
+        res.status(500).send(err.message);
+    }
+}
+
 module.exports = {
     addSeries,
-    getAllSeries
+    getAllSeries,
+    getSeriesByTitle,
+    updateSeries
 }

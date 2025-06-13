@@ -16,7 +16,7 @@ export default function registerPage(){
             if(err.response?.status === 404){
                 try{
                     const res = await axios.post(`http://192.168.150.128:3000/users`, user);
-                    Alert.alert("Success", "user create")
+                    Alert.alert("Success", "user create");
                 } catch(createErr){
                     Alert.alert("Error", "sign up failed")
                 }
@@ -47,7 +47,8 @@ export default function registerPage(){
 
             <Button title="sign up"
             onPress={async()=>{
-                await addUser(newUser)
+                await addUser(newUser);
+                router.push("index")
             }
             }
             />

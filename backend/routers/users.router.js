@@ -9,8 +9,8 @@ router.get('/:userName', usersController.getUserById);
 
 router.post('/', usersController.sighnUp);
 
-// router.put('/:id');
+router.put('/:userName', usersController.updateUserPassword);
 
-// router.delete('/:id');
+router.delete('/:userName', usersController.deleteUser);
 
 module.exports = router;

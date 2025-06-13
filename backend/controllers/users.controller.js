@@ -38,8 +38,45 @@ async function getUserById(req, res) {
     
 }
 
+async function updateUserPassword(req, res) {
+    try{
+        const {userName} = req.params;
+        const {password: newPassword} = req.body;
+        const changeUserPassword = await usersModel.findOneAndUpdate(
+            {userName: userName},
+            {password: newPassword},
+            {new: true}
+        )
+        if(!changeUserPassword){
+            res.status(404).send("user not found")
+        }
+        res.status(200).send("password changed")
+    } catch(err){
+         res.status(500).send(err.message);
+    }
+}
+
+async function deleteUser(req, res) {
+    try{
+        const {userName} = req.params;
+        const userToDelete = await usersModel.findOne({userName: userName})
+        if(!userToDelete){
+            res.status(404).send("user not found");
+        }
+        else{
+            await usersModel.deleteOne(userToDelete);
+            res.status(200).send("user delete");
+        }
+        
+    }catch(err){
+         res.status(500).send(err.message);
+    }
+}
+
 module.exports = {
     sighnUp,
     getAllUsers,
-    getUserById
+    getUserById,
+    updateUserPassword,
+    deleteUser
 }

@@ -5,11 +5,11 @@ const router = express.Router();
 
 router.get('/', seriesController.getAllSeries);
 
-// router.get('/:id');
+router.get('/:title', seriesController.getSeriesByTitle);
 
 router.post('/', seriesController.addSeries);
 
-// router.put('/:id');
+router.put('/:id', seriesController.updateSeries);
 
 // router.delete('/:id');
 
