@@ -22,13 +22,13 @@ export default function loginPage() {
            <Button title="Log in"
            onPress={async()=>{
                 try{
-                    const res = await axios.get(`http://192.168.150.128:3000/users/${user.userName}`);
+                    const res = await axios.get(`http://192.168.123.156:3000/users/${user.userName}`);
                     const hasUser = res.data;
                      if(!hasUser){
                         Alert.alert("you don't have an account")
                     }
                     else{
-                        hasUser.password === user.password ? Alert.alert(`${hasUser.name} log in`) :
+                        hasUser.password === user.password ?  router.push(`/profile/${hasUser.name}`) :
                         Alert.alert("wrong password")
                     }
                 }catch(err){
