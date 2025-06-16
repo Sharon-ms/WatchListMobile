@@ -13,7 +13,11 @@ async function addEpisode(req, res) {
 
 async function getAllEpisodes(req, res) {
     try {
-        const result = await episodesModel.find();
+        const {seriesId, seasonNum} = req.query;
+        let filter = {};
+        if(seriesId) filter.seriesId = seriesId;
+        if(seasonNum) filter.seasonNum = seasonNum;
+        const result = await episodesModel.find(filter);
         res.status(200).send(result);
     }
     catch (err) {

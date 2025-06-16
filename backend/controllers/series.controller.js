@@ -26,7 +26,7 @@ async function getSeriesByTitle(req, res) {
         const {title} = req.params;
         const result = await seriesModel.find({title: title});
         if(result.length === 0){
-            res.status(404).send("couldn't find a series whith that name")
+           return res.status(404).send("couldn't find a series whith that name")
         }
         res.status(200).send(result);
     }catch(err){

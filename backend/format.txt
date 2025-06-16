@@ -16,6 +16,7 @@
     "title": "c",
     "seasonNum": 0,
     "episodeNum": 0,
+    "seriesId": mongoose.Types.ObjectId
 }
 
 {
