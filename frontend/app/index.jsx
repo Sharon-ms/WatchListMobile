@@ -22,7 +22,7 @@ export default function loginPage() {
             <Button title="Log in"
                 onPress={async () => {
                     try {
-                        const res = await axios.get(`http://192.168.123.156:3000/users/${user.userName}`);
+                        const res = await axios.get(`http://192.168.56.1:3000/users/${user.userName}`);
                         const hasUser = res.data;
                         if (!hasUser) {
                             Alert.alert("you don't have an account")

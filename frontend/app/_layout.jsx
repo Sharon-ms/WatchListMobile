@@ -5,7 +5,7 @@ export default function appLayout() {
         <Stack>
             <Stack.Screen name="index" options={{ title: "login-page" }} />
             <Stack.Screen name="registerPage" options={{ title: "register-page" }} />
-            <Stack.Screen name="profile" options={{title: "profile-page"}}/>
+            {/* <Stack.Screen name="profile" options={{title: "profile-page"}}/> */}
         </Stack>
     )
 

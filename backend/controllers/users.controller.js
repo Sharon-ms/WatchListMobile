@@ -8,6 +8,7 @@ async function sighnUp(req, res) {
     }
     catch (err) {
         res.status(500).send(err.message);
+        console.log(err.message);
     }
 };
 
@@ -18,58 +19,62 @@ async function getAllUsers(req, res) {
     }
     catch (err) {
         res.status(500).send(err.message);
+        console.log(err.message);
     }
 };
 
 async function getUserById(req, res) {
-    try{
-        const {userName} = req.params;
-        const result = await usersModel.findOne({userName: userName});
-        if(!result){
+    try {
+        const { userName } = req.params;
+        const result = await usersModel.findOne({ userName: userName });
+        if (!result) {
             res.status(404).send("user dosn't exist")
         }
-        else{
+        else {
             res.status(200).send(result)
         }
     }
-    catch(err){
+    catch (err) {
         res.status(500).send(err.message);
+        console.log(err.message);
     }
-    
+
 }
 
 async function updateUserPassword(req, res) {
-    try{
-        const {userName} = req.params;
-        const {password: newPassword} = req.body;
+    try {
+        const { userName } = req.params;
+        const { password: newPassword } = req.body;
         const changeUserPassword = await usersModel.findOneAndUpdate(
-            {userName: userName},
-            {password: newPassword},
-            {new: true}
+            { userName: userName },
+            { password: newPassword },
+            { new: true }
         )
-        if(!changeUserPassword){
+        if (!changeUserPassword) {
             res.status(404).send("user not found")
         }
         res.status(200).send("password changed")
-    } catch(err){
-         res.status(500).send(err.message);
+    } catch (err) {
+        res.status(500).send(err.message);
+        console.log(err.message);
     }
 }
 
 async function deleteUser(req, res) {
-    try{
-        const {userName} = req.params;
-        const userToDelete = await usersModel.findOne({userName: userName})
-        if(!userToDelete){
+    try {
+        const { userName } = req.params;
+        const userToDelete = await usersModel.findOne({ userName: userName })
+        if (!userToDelete) {
             res.status(404).send("user not found");
         }
-        else{
+        else {
             await usersModel.deleteOne(userToDelete);
             res.status(200).send("user delete");
         }
-        
-    }catch(err){
-         res.status(500).send(err.message);
+
+    } catch (err) {
+        res.status(500).send(err.message);
+        console.log(err.message);
     }
 }
 
