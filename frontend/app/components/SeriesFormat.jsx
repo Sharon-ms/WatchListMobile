@@ -1,13 +1,19 @@
-import { View, Text, StyleSheet } from "react-native";
-
+import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { useRouter } from "expo-router";
 export default function SeriesFormat({ series }) {
   if (!series) return null;
-
+  const router = useRouter()
   return (
-    <View style={styles.card}>
-      <Text style={styles.title}>{series.title}</Text>
-      <Text style={styles.genre}>{series.genre}</Text>
-    </View>
+    <TouchableOpacity onPress={()=> router.push(`seriesDetails/${series._id}`)}>
+      <View style={styles.card}>
+        <Text style={styles.title}>{series.title}</Text>
+        <Text style={styles.genre}>{series.genre}</Text>
+        <Image
+          source={{ uri: series.image }}
+          style={styles.image} />
+      </View>
+    </TouchableOpacity>
+
   );
 }
 
@@ -32,4 +38,9 @@ const styles = StyleSheet.create({
     color: "#666",
     marginTop: 4,
   },
+  image: {
+    width: 100,
+    height: 100,
+    borderRadius: 8,
+  }
 });

@@ -22,7 +22,11 @@ export default function loginPage() {
             <Button title="Log in"
                 onPress={async () => {
                     try {
+<<<<<<< HEAD
                         const res = await axios.get(`http://192.168.56.1:3000/users/${user.userName}`);
+=======
+                        const res = await axios.get(`http://192.168.150.128:3000/users/${user.userName}`);
+>>>>>>> 3c131ee3405498b534a3b1a49dd9c7e281a0df1c
                         const hasUser = res.data;
                         if (!hasUser) {
                             Alert.alert("you don't have an account")
@@ -40,6 +44,7 @@ export default function loginPage() {
                         }
                     }
                 }} />
+
 
             <TouchableOpacity onPress={() => {
                 router.push("/registerPage")
