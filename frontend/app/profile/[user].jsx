@@ -8,11 +8,7 @@ export default function profile() {
     const [seriesList, setSeriesList] = useState([])
     async function getSeries() {
         try {
-<<<<<<< HEAD
             const seriesDate = await axios.get(`http://192.168.56.1:3000/series`);
-=======
-            const seriesDate = await axios.get(`http://192.168.150.128:3000/series`);
->>>>>>> 3c131ee3405498b534a3b1a49dd9c7e281a0df1c
             setSeriesList(seriesDate.data);
         } catch (err) {
             console.log("error");
@@ -27,11 +23,7 @@ export default function profile() {
         <SafeAreaView>
             <Text>Hello {user} </Text>
             {
-<<<<<<< HEAD
                 seriesList.map((s, index) => (<SeriesFormat key={index} series={s} />))
-=======
-                seriesList.map((s, index) => (<SeriesFormat key={index} series={s}/>))
->>>>>>> 3c131ee3405498b534a3b1a49dd9c7e281a0df1c
             }
         </SafeAreaView>
     )

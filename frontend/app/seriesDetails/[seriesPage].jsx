@@ -11,7 +11,7 @@ export default function seriesPage() {
 
     async function getEpisodes() {
         try {
-            const episodesData = await axios.get(`http://192.168.150.128:3000/episodes?seriesId=${seriesPage}`);
+            const episodesData = await axios.get(`http://192.168.56.1:3000/episodes?seriesId=${seriesPage}`);
             setEpisodes(episodesData.data);
         } catch (err) {
             console.error(err.message);

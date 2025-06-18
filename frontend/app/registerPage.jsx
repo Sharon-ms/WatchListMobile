@@ -9,21 +9,13 @@ export default function registerPage() {
     //http://192.168.150.128:3000/users
     async function addUser(user) {
         try {
-<<<<<<< HEAD
             const hasUser = await axios.get(`http://192.168.56.1:3000/users/${user.userName}`);
-=======
-            const hasUser = await axios.get(`http://192.168.150.128:3000/users/${user.userName}`);
->>>>>>> 3c131ee3405498b534a3b1a49dd9c7e281a0df1c
             Alert.alert("oops", "this username already in use");
             return;
         } catch (err) {
             if (err.response?.status === 404) {
                 try {
-<<<<<<< HEAD
                     const res = await axios.post(`http://192.168.56.1:3000/users`, user);
-=======
-                    const res = await axios.post(`http://192.168.150.128:3000/users`, user);
->>>>>>> 3c131ee3405498b534a3b1a49dd9c7e281a0df1c
                     Alert.alert("Success", "user create");
                     router.push("/");
                 } catch (createErr) {
