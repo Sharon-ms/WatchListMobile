@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
     shadowColor: "#000",
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 2, // עובד רק באנדרואיד
+    elevation: 2,   
   },
   title: {
     fontSize: 18,

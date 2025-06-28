@@ -1,9 +1,11 @@
 import axios from "axios"
+import { useUser } from "./context/UserContext"
 import { useState } from "react"
 import { useRouter } from "expo-router"
 import { SafeAreaView, Button, Alert, View, Text, TextInput, TouchableOpacity } from "react-native"
 
 export default function loginPage() {
+    const { loginUser } = useUser()
     const router = useRouter()
     const [user, setUser] = useState({ "userName": "", "password": "" })
 
@@ -22,18 +24,19 @@ export default function loginPage() {
             <Button title="Log in"
                 onPress={async () => {
                     try {
-<<<<<<< HEAD
-                        const res = await axios.get(`http://192.168.56.1:3000/users/${user.userName}`);
-=======
                         const res = await axios.get(`http://192.168.150.128:3000/users/${user.userName}`);
->>>>>>> 3c131ee3405498b534a3b1a49dd9c7e281a0df1c
                         const hasUser = res.data;
                         if (!hasUser) {
                             Alert.alert("you don't have an account")
                         }
                         else {
-                            hasUser.password === user.password ? router.push(`/profile/${hasUser.name}`) :
+                            if (hasUser.password === user.password) {
+                                loginUser(hasUser);
+                                router.push(`/profile/${hasUser.name}`)
+                            }
+                            else {
                                 Alert.alert("wrong password")
+                            }
                         }
                     } catch (err) {
                         if (err.response && err.response.status === 404) {

@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.get('/', episodesController.getAllEpisodes);
 
-// router.get('/:id');
+router.get('/:id', episodesController.getEpisodeById)
 
 router.post('/', episodesController.addEpisode);
 

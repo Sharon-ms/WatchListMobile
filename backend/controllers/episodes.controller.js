@@ -13,10 +13,10 @@ async function addEpisode(req, res) {
 
 async function getAllEpisodes(req, res) {
     try {
-        const {seriesId, seasonNum} = req.query;
+        const { seriesId, seasonNum } = req.query;
         let filter = {};
-        if(seriesId) filter.seriesId = seriesId;
-        if(seasonNum) filter.seasonNum = seasonNum;
+        if (seriesId) filter.seriesId = seriesId;
+        if (seasonNum) filter.seasonNum = seasonNum;
         const result = await episodesModel.find(filter);
         res.status(200).send(result);
     }
@@ -25,7 +25,21 @@ async function getAllEpisodes(req, res) {
     }
 };
 
+async function getEpisodeById(req, res) {
+    try {
+        const { id } = req.params;
+        const result = await episodesModel.findOne({ _id: id })
+        if (!result) {
+            return res.status(404).send("not found")
+        }
+        res.status(200).send(result)
+    } catch (err) {
+        res.status(500).send(err.message)
+    }
+}
+
 module.exports = {
     addEpisode,
-    getAllEpisodes
+    getAllEpisodes,
+    getEpisodeById
 }
