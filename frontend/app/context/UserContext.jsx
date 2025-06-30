@@ -20,7 +20,7 @@ export function UserProvider({ children }) {
 
     async function loadWatchList(userName) {
         try {
-            const result = await axios.get(`http://192.168.150.128:3000/watched/${userName}`)
+            const result = await axios.get(`http://10.0.0.15:3000/watched/${userName}`)
             setWatchList(result.data)
         } catch (err) {
             console.error(err.message);
@@ -29,7 +29,7 @@ export function UserProvider({ children }) {
 
     async function addToWatchList(episodeId) {
         try {
-            await axios.post(`http://192.168.150.128:3000/watched`,
+            await axios.post(`http://10.0.0.15:3000/watched`,
                 {
                     userName: user.userName,
                     episodeId: episodeId
