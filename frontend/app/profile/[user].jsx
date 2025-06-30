@@ -3,6 +3,7 @@ import { SafeAreaView, Text } from "react-native";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import SeriesFormat from "../components/SeriesFormat";
+import UserFormat from "../components/UserFormat";
 export default function profile() {
     const { user } = useLocalSearchParams()
     const [seriesList, setSeriesList] = useState([])
@@ -18,10 +19,10 @@ export default function profile() {
     useEffect(() => {
         getSeries()
     }, [user])
-
+    
     return (
         <SafeAreaView>
-            <Text>Hello {user} </Text>
+            <UserFormat user={user}/>
             {
                 seriesList.map((s, index) => (<SeriesFormat key={index} series={s}/>))
             }

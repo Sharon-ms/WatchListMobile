@@ -1,6 +1,7 @@
 const express = require('express');
 const connect = require("./mongoDB");
 const cors = require("cors")
+require("dotenv").config()
 
 const usersRouter = require('./routers/users.router');
 const seriesRouter = require('./routers/series.router');

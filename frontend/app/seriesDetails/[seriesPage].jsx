@@ -38,8 +38,8 @@ export default function seriesPage() {
         getEpisodes();
         getSeasonAmount();
     }, [seriesPage]);
-
-    const filterEpisodes = episodes.filter(ep => ep.seasonNum === selectedSeason)
+    let filterEpisodes = [0];
+    filterEpisodes = episodes.filter(ep => ep.seasonNum === selectedSeason)
     const seasonArray = Array.from({length: seasonsAmount})
     return (
         <SafeAreaView>
