@@ -21,9 +21,9 @@ async function getAllSeries(req, res) {
     }
 };
 
-async function getSeriesByTitle(req, res) {
+async function getSeriesById(req, res) {
     try{
-        const {title} = req.params;
+        const {id} = req.params;
         const result = await seriesModel.find({title: title});
         if(result.length === 0){
            return res.status(404).send("couldn't find a series whith that name")
@@ -55,6 +55,6 @@ async function updateSeries(req, res) {
 module.exports = {
     addSeries,
     getAllSeries,
-    getSeriesByTitle,
+    getSeriesById,
     updateSeries
 }

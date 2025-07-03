@@ -1,7 +1,7 @@
 import { useLocalSearchParams } from "expo-router";
 import axios from "axios"
-import { useState, useEffect } from "react";
-import { Button, SafeAreaView, Text, TextInput, Alert } from "react-native";
+import { useState, useEffect, } from "react";
+import { Button, SafeAreaView, Text, TextInput, Alert, ScrollView } from "react-native";
 import EpisodeFormat from "../components/EpisodeFormat";
 
 export default function seriesPage() {
@@ -43,6 +43,7 @@ export default function seriesPage() {
     const seasonArray = Array.from({ length: seasonsAmount })
     return (
         <SafeAreaView>
+            <ScrollView>
             {
                 seasonArray.map((_, index) => (
                     <Button key={index}
@@ -58,6 +59,7 @@ export default function seriesPage() {
             ) : (<Text>no episodes to this season</Text>)
 
             }
+            </ScrollView>
         </SafeAreaView>
 
     )

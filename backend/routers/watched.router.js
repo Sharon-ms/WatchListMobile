@@ -14,7 +14,8 @@ router.post('/', watchedController.markAsWatched);
 
 // router.put('/:id');
 
-router.delete('/:userName', watchedController.deleteUserWatchList
-);
+router.delete('/:userName', watchedController.deleteUserWatchList);
+
+router.delete('/', watchedController.deleteOneWatched)
 
 module.exports = router;

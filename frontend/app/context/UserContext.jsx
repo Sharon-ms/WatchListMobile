@@ -40,6 +40,15 @@ export function UserProvider({ children }) {
         }
     }
 
+    async function daleteFromWatchList(episodeId) {
+        try{
+            await axios.delete(`http://172.19.37.91:3000/watched?userName=${user.userName}&episodeId=${episodeId}`)
+            loadWatchList(user.userName)
+        }catch(err){
+            console.error(err.message);
+        }
+    }
+
     function logoutUser() {
         setUser(null);
         setIsAuthenticated(false)
@@ -55,7 +64,8 @@ export function UserProvider({ children }) {
                 loginUser,
                 loadWatchList,
                 addToWatchList,
-                logoutUser
+                logoutUser,
+                daleteFromWatchList
             }}>
             {children}
         </userContext.Provider>
