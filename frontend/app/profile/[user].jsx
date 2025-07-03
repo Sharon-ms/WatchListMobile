@@ -1,5 +1,5 @@
 import { useLocalSearchParams } from "expo-router";
-import { SafeAreaView, Text } from "react-native";
+import { SafeAreaView, Text, ScrollView } from "react-native";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import SeriesFormat from "../components/SeriesFormat";
@@ -9,7 +9,7 @@ export default function profile() {
     const [seriesList, setSeriesList] = useState([])
     async function getSeries() {
         try {
-            const seriesDate = await axios.get(`http://192.168.150.128:3000/series`);
+            const seriesDate = await axios.get(`http://172.19.37.91:3000/series`);
             setSeriesList(seriesDate.data);
         } catch (err) {
             console.log("error");
@@ -22,10 +22,12 @@ export default function profile() {
     
     return (
         <SafeAreaView>
+            <ScrollView>
             <UserFormat user={user}/>
             {
                 seriesList.map((s, index) => (<SeriesFormat key={index} series={s}/>))
             }
+            </ScrollView>
         </SafeAreaView>
     )
 

@@ -20,7 +20,7 @@ export function UserProvider({ children }) {
 
     async function loadWatchList(userName) {
         try {
-            const result = await axios.get(`http://192.168.150.128:3000/watched/${userName}`)
+            const result = await axios.get(`http://172.19.37.91:3000/watched/${userName}`)
             setWatchList(result.data)
         } catch (err) {
             console.error(err.message);
@@ -29,13 +29,25 @@ export function UserProvider({ children }) {
 
     async function addToWatchList(episodeId) {
         try {
-            await axios.post(`http://192.168.150.128:3000/watched`,
-                {
-                    userName: user.userName,
-                    episodeId: episodeId
-                })
+            const newWatched = {
+                userName: user.userName,
+                episodeId: episodeId
+            }
+            const alreadyWatched = watchList.some(wl => wl.episodeId === newWatched.episodeId);
+            if (alreadyWatched) return;
+
+            await axios.post(`http://172.19.37.91:3000/watched`, newWatched)
             loadWatchList(user.userName);
         } catch (err) {
+            console.error(err.message);
+        }
+    }
+
+    async function daleteFromWatchList(episodeId) {
+        try{
+            await axios.delete(`http://172.19.37.91:3000/watched?userName=${user.userName}&episodeId=${episodeId}`)
+            loadWatchList(user.userName)
+        }catch(err){
             console.error(err.message);
         }
     }
@@ -55,7 +67,8 @@ export function UserProvider({ children }) {
                 loginUser,
                 loadWatchList,
                 addToWatchList,
-                logoutUser
+                logoutUser,
+                daleteFromWatchList
             }}>
             {children}
         </userContext.Provider>

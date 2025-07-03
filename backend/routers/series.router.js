@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.get('/', seriesController.getAllSeries);
 
-router.get('/:title', seriesController.getSeriesByTitle);
+router.get('/:id', seriesController.getSeriesById);
 
 router.post('/', seriesController.addSeries);
 

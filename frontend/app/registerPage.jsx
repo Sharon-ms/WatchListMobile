@@ -6,16 +6,16 @@ import { SafeAreaView, TextInput, Button, Alert } from "react-native";
 export default function registerPage() {
     const router = useRouter()
     const [newUser, setNewUser] = useState({ "name": "", "userName": "", "password": "" })
-    //http://192.168.150.128:3000/users
+    //http:// 172.19.37.91:3000/users
     async function addUser(user) {
         try {
-            const hasUser = await axios.get(`http://192.168.150.128:3000/users/${user.userName}`);
+            const hasUser = await axios.get(`http://172.19.37.91:3000/users/${user.userName}`);
             Alert.alert("oops", "this username already in use");
             return;
         } catch (err) {
             if (err.response?.status === 404) {
                 try {
-                    const res = await axios.post(`http://192.168.150.128:3000/users`, user);
+                    const res = await axios.post(`http://172.19.37.91:3000/users`, user);
                     Alert.alert("Success", "user create");
                     router.push("/");
                 } catch (createErr) {

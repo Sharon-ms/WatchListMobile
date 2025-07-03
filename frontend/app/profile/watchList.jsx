@@ -13,14 +13,14 @@ export default function WatchList() {
             try {
                 const results = await Promise.all(
                     watchList.map(ep =>
-                        axios.get(`http://192.168.150.128:3000/episodes/${ep.episodeId}`)
+                        axios.get(`http://172.19.37.91:3000/episodes/${ep.episodeId}`)
                     )
                 );
                 const episodeData = results.map(res => res.data);
                 setEpisodes(episodeData);
                 // const seriesResult = await Promise.all(
                 //     episodeData.map(ed =>
-                //         axios.get(`http://192.168.150.128:3000/series/${ed.seriesId}`)
+                //         axios.get(`http:// 172.19.37.91:3000/series/${ed.seriesId}`)
                 //     )
                 // );
                 // const seriesChack = seriesResult.filter(s =>

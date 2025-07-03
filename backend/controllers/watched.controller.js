@@ -56,11 +56,22 @@ async function deleteUserWatchList(req, res) {
   }
 }
 
+async function deleteOneWatched(req, res) {
+ try{
+    const {userName, episodeId} = req.query;
+    const result = await watchedModel.deleteOne({userName: userName, episodeId: episodeId})
+    res.status(200).send(`Deleted ${result.deletedCount} records for user ${userName}`)
+ }catch(err){
+    res.status(200).send(err.message);
+ }
+}
+
 
 module.exports = {
     markAsWatched,
     getAllWatched,
     getWatchedOfUser,
     deleteWatched,
-    deleteUserWatchList
+    deleteUserWatchList,
+    deleteOneWatched
 }
