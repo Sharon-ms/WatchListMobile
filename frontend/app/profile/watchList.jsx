@@ -2,12 +2,17 @@ import { Text, SafeAreaView, FlatList } from "react-native";
 import { useUser } from "../context/UserContext";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import SeriesFormat from "../components/SeriesFormat"
 
 export default function WatchList() {
     const { watchList } = useUser();
     const [episodes, setEpisodes] = useState([]);
     const [series, setSeries] = useState([]);
-
+    const allSeriesData = axios.get("http://172.19.37.91:3000/series");
+    const allSeries = allSeriesData.data;
+    const seriesIds = [...new Set(episodes.map(ep=>ep.seriesId))]
+    const filterSeries = allSeries.filter(s=> seriesIds.includes(s._id))
+    setSeries(filterSeries);
     useEffect(() => {
         async function fetchEpisodes() {
             try {
@@ -41,13 +46,16 @@ export default function WatchList() {
     return (
         <SafeAreaView>
             <Text>My WatchList</Text>
-            <FlatList
+            {/* <FlatList
                 data={episodes}
                 keyExtractor={(item) => item._id}
                 renderItem={({ item }) => (
                     <Text>{item.title}</Text>
                 )}
-            />
+            /> */}
+            {
+                series.map((s, index)=> <SeriesFormat key={index} series={s}/>)
+            }
         </SafeAreaView>
     );
 }
