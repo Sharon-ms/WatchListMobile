@@ -11,7 +11,6 @@ export default function UserFormat({user}){
     return(
         <View style={styles.avatar}>
             <Text style={styles.font}>{name}</Text>
-            <Text></Text>
         </View>
     )
 }

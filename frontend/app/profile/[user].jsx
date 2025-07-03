@@ -9,7 +9,7 @@ export default function profile() {
     const [seriesList, setSeriesList] = useState([])
     async function getSeries() {
         try {
-            const seriesDate = await axios.get(`http://10.0.0.15:3000/series`);
+            const seriesDate = await axios.get(`http://192.168.150.128:3000/series`);
             setSeriesList(seriesDate.data);
         } catch (err) {
             console.log("error");

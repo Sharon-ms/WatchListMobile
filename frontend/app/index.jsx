@@ -24,7 +24,7 @@ export default function loginPage() {
             <Button title="Log in"
                 onPress={async () => {
                     try {
-                        const res = await axios.get(`http://10.0.0.15:3000/users/${user.userName}`);
+                        const res = await axios.get(`http://192.168.150.128:3000/users/${user.userName}`);
                         const hasUser = res.data;
                         if (!hasUser) {
                             Alert.alert("you don't have an account")
@@ -43,7 +43,7 @@ export default function loginPage() {
                             Alert.alert("you don't have an account")
                         }
                         else {
-                            Alert.alert("connection error")
+                            Alert.alert("Conection error")
                         }
                     }
                 }} />

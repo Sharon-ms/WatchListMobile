@@ -3,7 +3,7 @@ const episodesModel = require('../models/episodes.model');
 async function addEpisode(req, res) {
     try {
         const episode = req.body;
-        const result = await episodesModel.create(episode);
+        const result = await episodesModel.insertMany(episode);
         res.status(200).send("episode added successfuly");
     }
     catch (err) {

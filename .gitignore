@@ -2,7 +2,7 @@
 
 # dependencies
 node_modules/
-
+**/node_modules/
 # Expo
 .expo/
 dist/
@@ -35,3 +35,6 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
+
+# backend-specific
+backend/node_modules/
