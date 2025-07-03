@@ -12,7 +12,8 @@ export default function EpisodeFormat({ episode }) {
             <Text style={styles.title}>{episode.title}</Text>
 
             <TouchableOpacity
-                style={[styles.mark, isWatched ? styles.markWatched : styles.markUnwatched]}
+                style={[styles.mark, isWatched
+                    ? styles.markWatched : styles.markUnwatched]}
                 onPress={() => addToWatchList(episode._id)}
                 accessibilityLabel={isWatched ? "Mark as unwatched" : "Mark as watched"}
             >
@@ -30,8 +31,8 @@ const styles = StyleSheet.create({
         padding: 16,
         marginBottom: 12,
         borderRadius: 10,
-        elevation: 2, 
-        shadowColor: "#000", 
+        elevation: 2,
+        shadowColor: "#000",
         shadowOffset: { width: 0, height: 1 },
         shadowOpacity: 0.2,
         shadowRadius: 1.41,

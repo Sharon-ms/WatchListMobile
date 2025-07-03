@@ -1,6 +1,7 @@
 import axios from "axios"
 import { useUser } from "./context/UserContext"
 import { useState } from "react"
+
 import { useRouter } from "expo-router"
 import { SafeAreaView, Button, Alert, View, Text, TextInput, TouchableOpacity } from "react-native"
 
@@ -24,7 +25,7 @@ export default function loginPage() {
             <Button title="Log in"
                 onPress={async () => {
                     try {
-                        const res = await axios.get(`http://192.168.150.128:3000/users/${user.userName}`);
+                        const res = await axios.get(`http://172.19.37.90:3000/users/${user.userName}`);
                         const hasUser = res.data;
                         if (!hasUser) {
                             Alert.alert("you don't have an account")
