@@ -6,22 +6,14 @@ import EpisodeFormat from "../components/EpisodeFormat";
 import Constants from 'expo-constants';
 
 export default function seriesPage() {
-<<<<<<< HEAD
     const IP_URL = Constants.expoConfig.extra.IP_URL
-=======
-    const IP = "172.19.37.90"
->>>>>>> 070e0c35fc65923b8c66017463d9784b0ee38f4e
     const { seriesPage } = useLocalSearchParams();
     const [episodes, setEpisodes] = useState([])
     const [seasonsAmount, setSeasonAmount] = useState(0);
     const [selectedSeason, setSelectedSeason] = useState(null)
     async function getEpisodes() {
         try {
-<<<<<<< HEAD
             const episodesData = await axios.get(`http://${IP_URL}:3000/episodes?seriesId=${seriesPage}`);
-=======
-            const episodesData = await axios.get(`http://172.19.37.90:3000/episodes?seriesId=${seriesPage}`);
->>>>>>> 070e0c35fc65923b8c66017463d9784b0ee38f4e
             setEpisodes(episodesData.data);
         } catch (err) {
             console.error(err.message);

@@ -44,7 +44,7 @@ async function getUserById(req, res) {
 async function updateUserPassword(req, res) {
     try {
         const { userName } = req.params;
-        const { password: newPassword } = req.body;
+        const { newPassword } = req.body;
         const changeUserPassword = await usersModel.findOneAndUpdate(
             { userName: userName },
             { password: newPassword },
