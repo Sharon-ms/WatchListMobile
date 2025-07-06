@@ -8,8 +8,8 @@ export default function appLayout() {
                 <Stack.Screen name="index" options={{ title: "login-page" }} />
                 <Stack.Screen name="registerPage" options={{ title: "register-page" }} />
                 <Stack.Screen name="profile" options={{ title: "profile-page" }} />
-                <Stack.Screen name="profile/[user]" options={{ title: "profile-page" }} />
                 <Stack.Screen name="seriesDetails/[seriesPage]" options={{ title: "series-page" }} />
+                <Stack.Screen name="details" options={{title: "user-details"}}/>
             </Stack >
         </UserProvider>
     )

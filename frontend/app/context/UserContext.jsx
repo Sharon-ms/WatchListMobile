@@ -1,6 +1,8 @@
 import { createContext, useContext, useState } from "react";
+import Constants from 'expo-constants';
 import axios from "axios";
 
+const IP_URL = Constants.expoConfig.extra.IP_URL
 const userContext = createContext();
 
 export function useUser() {
@@ -20,7 +22,7 @@ export function UserProvider({ children }) {
 
     async function loadWatchList(userName) {
         try {
-            const result = await axios.get(`http://172.19.37.91:3000/watched/${userName}`)
+            const result = await axios.get(`http://${IP_URL}:3000/watched/${userName}`)
             setWatchList(result.data)
         } catch (err) {
             console.error(err.message);
@@ -36,7 +38,7 @@ export function UserProvider({ children }) {
             const alreadyWatched = watchList.some(wl => wl.episodeId === newWatched.episodeId);
             if (alreadyWatched) return;
 
-            await axios.post(`http://172.19.37.91:3000/watched`, newWatched)
+            await axios.post(`http://${IP_URL}:3000/watched`, newWatched)
             loadWatchList(user.userName);
         } catch (err) {
             console.error(err.message);
@@ -45,7 +47,7 @@ export function UserProvider({ children }) {
 
     async function daleteFromWatchList(episodeId) {
         try{
-            await axios.delete(`http://172.19.37.91:3000/watched?userName=${user.userName}&episodeId=${episodeId}`)
+            await axios.delete(`http://${IP_URL}:3000/watched?userName=${user.userName}&episodeId=${episodeId}`)
             loadWatchList(user.userName)
         }catch(err){
             console.error(err.message);

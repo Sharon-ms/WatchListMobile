@@ -3,8 +3,10 @@ import { useUser } from "./context/UserContext"
 import { useState } from "react"
 import { useRouter } from "expo-router"
 import { SafeAreaView, Button, Alert, View, Text, TextInput, TouchableOpacity } from "react-native"
-
+import Constants from 'expo-constants';
+ 
 export default function loginPage() {
+    const IP_URL = Constants.expoConfig.extra.IP_URL
     const { loginUser } = useUser()
     const router = useRouter()
     const [user, setUser] = useState({ "userName": "", "password": "" })
@@ -24,7 +26,7 @@ export default function loginPage() {
             <Button title="Log in"
                 onPress={async () => {
                     try {
-                        const res = await axios.get(`http://172.19.37.91:3000/users/${user.userName}`);
+                        const res = await axios.get(`http://${IP_URL}:3000/users/${user.userName}`);
                         const hasUser = res.data;
                         if (!hasUser) {
                             Alert.alert("you don't have an account")

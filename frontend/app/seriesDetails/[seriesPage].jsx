@@ -3,16 +3,17 @@ import axios from "axios"
 import { useState, useEffect, } from "react";
 import { Button, SafeAreaView, Text, TextInput, Alert, ScrollView } from "react-native";
 import EpisodeFormat from "../components/EpisodeFormat";
+import Constants from 'expo-constants';
 
 export default function seriesPage() {
-    const IP = "   172.19.37.91"
+    const IP_URL = Constants.expoConfig.extra.IP_URL
     const { seriesPage } = useLocalSearchParams();
     const [episodes, setEpisodes] = useState([])
     const [seasonsAmount, setSeasonAmount] = useState(0);
     const [selectedSeason, setSelectedSeason] = useState(null)
     async function getEpisodes() {
         try {
-            const episodesData = await axios.get(`http://172.19.37.91:3000/episodes?seriesId=${seriesPage}`);
+            const episodesData = await axios.get(`http://${IP_URL}:3000/episodes?seriesId=${seriesPage}`);
             setEpisodes(episodesData.data);
         } catch (err) {
             console.error(err.message);
@@ -21,7 +22,7 @@ export default function seriesPage() {
 
     async function getSeasonAmount() {
         try {
-            const series = await axios.get(`http://172.19.37.91:3000/series`);
+            const series = await axios.get(`http://${IP_URL}:3000/series`);
             const findSeries = series.data.find(se => se._id === seriesPage);
             if (findSeries) {
                 setSeasonAmount(findSeries.seasonsAmount)

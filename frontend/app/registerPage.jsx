@@ -2,20 +2,22 @@ import axios from "axios";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { SafeAreaView, TextInput, Button, Alert } from "react-native";
+import Constants from 'expo-constants';
 
 export default function registerPage() {
+    const IP_URL = Constants.expoConfig.extra.IP_URL
     const router = useRouter()
     const [newUser, setNewUser] = useState({ "name": "", "userName": "", "password": "" })
     //http:// 172.19.37.91:3000/users
     async function addUser(user) {
         try {
-            const hasUser = await axios.get(`http://172.19.37.91:3000/users/${user.userName}`);
+            const hasUser = await axios.get(`http://${IP_URL}:3000/users/${user.userName}`);
             Alert.alert("oops", "this username already in use");
             return;
         } catch (err) {
             if (err.response?.status === 404) {
                 try {
-                    const res = await axios.post(`http://172.19.37.91:3000/users`, user);
+                    const res = await axios.post(`http://${IP_URL}:3000/users`, user);
                     Alert.alert("Success", "user create");
                     router.push("/");
                 } catch (createErr) {

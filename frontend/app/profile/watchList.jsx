@@ -3,12 +3,14 @@ import { useUser } from "../context/UserContext";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import SeriesFormat from "../components/SeriesFormat"
+import Constants from 'expo-constants';
 
 export default function WatchList() {
+    const IP_URL = Constants.expoConfig.extra.IP_URL
     const { watchList } = useUser();
     const [episodes, setEpisodes] = useState([]);
     const [series, setSeries] = useState([]);
-    const allSeriesData = axios.get("http://172.19.37.91:3000/series");
+    const allSeriesData = axios.get(`http://${IP_URL}:3000/series`);
     const allSeries = allSeriesData.data;
     const seriesIds = [...new Set(episodes.map(ep=>ep.seriesId))]
     const filterSeries = allSeries.filter(s=> seriesIds.includes(s._id))
@@ -18,7 +20,7 @@ export default function WatchList() {
             try {
                 const results = await Promise.all(
                     watchList.map(ep =>
-                        axios.get(`http://172.19.37.91:3000/episodes/${ep.episodeId}`)
+                        axios.get(`http://${IP_URL}:3000/episodes/${ep.episodeId}`)
                     )
                 );
                 const episodeData = results.map(res => res.data);
