@@ -8,7 +8,6 @@ export default function registerPage() {
     const IP_URL = Constants.expoConfig.extra.IP_URL
     const router = useRouter()
     const [newUser, setNewUser] = useState({ "name": "", "userName": "", "password": "" })
-    //http:// 172.19.37.91:3000/users
     async function addUser(user) {
         try {
             const hasUser = await axios.get(`http://${IP_URL}:3000/users/${user.userName}`);
