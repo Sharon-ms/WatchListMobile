@@ -18,7 +18,7 @@ export default function registerPage() {
                 try {
                     const res = await axios.post(`http://${IP_URL}:3000/users`, user);
                     Alert.alert("Success", "user create");
-                    router.push("/");
+                    router.push("/loginPage");
                 } catch (createErr) {
                     Alert.alert("Error", "sign up failed")
                 }

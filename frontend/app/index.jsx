@@ -1,62 +1,44 @@
-import axios from "axios"
-import { useUser } from "./context/UserContext"
-import { useState } from "react"
-
-import { useRouter } from "expo-router"
-import { SafeAreaView, Button, Alert, View, Text, TextInput, TouchableOpacity } from "react-native"
+import { useUser } from "./context/UserContext";
+import { useRouter } from "expo-router";
+import { useState, useEffect } from "react";
+import { SafeAreaView, Button, ScrollView, View } from "react-native";
+import axios from "axios";
+import UserFormat from "./components/UserFormat";
+import SeriesFormat from "./components/SeriesFormat";
 import Constants from 'expo-constants';
- 
-export default function loginPage() {
-    const IP_URL = Constants.expoConfig.extra.IP_URL
-    const { loginUser } = useUser()
-    const router = useRouter()
-    const [user, setUser] = useState({ "userName": "", "password": "" })
 
+export default function HomePage() {
+
+    const router = useRouter()
+    const IP_URL = Constants.expoConfig.extra.IP_URL
+    const { user, isAuthenticated, logoutUser } = useUser()
+    
+    const [seriesList, setSeriesList] = useState([])
+    async function getSeries() {
+        try {
+            const seriesDate = await axios.get(`http://${IP_URL}:3000/series`);
+            setSeriesList(seriesDate.data);
+        } catch (err) {
+            console.log("error");
+        }
+
+    }
+    useEffect(() => {
+        getSeries()
+    }, [])
+    
     return (
         <SafeAreaView>
-            <TextInput placeholder="user name"
-                value={user.userName}
-                onChangeText={(text) => setUser(prev => ({ ...prev, userName: text }))}
-            />
-
-            <TextInput placeholder="password"
-                value={user.password}
-                onChangeText={(text) => setUser(prev => ({ ...prev, password: text }))}
-            />
-
-            <Button title="Log in"
-                onPress={async () => {
-                    try {
-                        const res = await axios.get(`http://${IP_URL}:3000/users/${user.userName}`);
-                        const hasUser = res.data;
-                        if (!hasUser) {
-                            Alert.alert("you don't have an account")
-                        }
-                        else {
-                            if (hasUser.password === user.password) {
-                                loginUser(hasUser);
-                                router.push(`/profile/${hasUser.name}`)
-                            }
-                            else {
-                                Alert.alert("wrong password")
-                            }
-                        }
-                    } catch (err) {
-                        if (err.response && err.response.status === 404) {
-                            Alert.alert("you don't have an account")
-                        }
-                        else {
-                            Alert.alert("Conection error")
-                        }
-                    }
-                }} />
-
-
-            <TouchableOpacity onPress={() => {
-                router.push("/registerPage")
-            }}>
-                <Text>Don't have an account? Sign Up</Text>
-            </TouchableOpacity>
+            <ScrollView>
+            {
+                isAuthenticated ?<View> <UserFormat user={user}/> <Button title="log out" onPress={()=>logoutUser()}/></View> : <Button title="login" onPress={()=>router.push("/loginPage")}/>
+            }
+           
+            {
+                seriesList.map((s, index) => (<SeriesFormat key={index} series={s}/>))
+            }
+            </ScrollView>
         </SafeAreaView>
     )
+
 }

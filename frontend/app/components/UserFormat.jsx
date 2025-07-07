@@ -14,7 +14,7 @@ export default function UserFormat({ user }) {
         }
     }
     useEffect(() => {
-        avatar(user)
+        avatar(user.userName)
     }, [])
 
     return (
