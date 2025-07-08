@@ -18,7 +18,7 @@ export default function UserFormat({ user }) {
     }, [])
 
     return (
-        <TouchableOpacity onPress={()=> router.push('details')}>
+        <TouchableOpacity onPress={()=> router.push('profile/details')}>
             <View style={styles.avatar}>
                 <Text style={styles.font}>{name}</Text>
             </View>

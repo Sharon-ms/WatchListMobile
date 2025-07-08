@@ -1,7 +1,7 @@
 import { useUser } from "./context/UserContext";
 import { useRouter } from "expo-router";
 import { useState, useEffect } from "react";
-import { SafeAreaView, Button, ScrollView, View } from "react-native";
+import { SafeAreaView, Button, ScrollView, View, Text } from "react-native";
 import axios from "axios";
 import UserFormat from "./components/UserFormat";
 import SeriesFormat from "./components/SeriesFormat";
@@ -12,7 +12,7 @@ export default function HomePage() {
     const router = useRouter()
     const IP_URL = Constants.expoConfig.extra.IP_URL
     const { user, isAuthenticated, logoutUser } = useUser()
-    
+
     const [seriesList, setSeriesList] = useState([])
     async function getSeries() {
         try {
@@ -26,17 +26,20 @@ export default function HomePage() {
     useEffect(() => {
         getSeries()
     }, [])
-    
+
     return (
         <SafeAreaView>
             <ScrollView>
-            {
-                isAuthenticated ?<View> <UserFormat user={user}/> <Button title="log out" onPress={()=>logoutUser()}/></View> : <Button title="login" onPress={()=>router.push("/loginPage")}/>
-            }
-           
-            {
-                seriesList.map((s, index) => (<SeriesFormat key={index} series={s}/>))
-            }
+                {
+                    isAuthenticated ? <Text>connected as{user.userName}</Text> : <Text>Guest</Text>
+                }
+                {
+                    isAuthenticated ? <View> <UserFormat user={user} /> <Button title="log out" onPress={() => logoutUser()} /></View> : <Button title="login" onPress={() => router.push("/loginPage")} />
+                }
+
+                {
+                    seriesList.map((s, index) => (<SeriesFormat key={index} series={s} />))
+                }
             </ScrollView>
         </SafeAreaView>
     )
