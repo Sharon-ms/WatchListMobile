@@ -12,7 +12,7 @@ export default function HomePage() {
     const router = useRouter()
     const IP_URL = Constants.expoConfig.extra.IP_URL
     const { user, isAuthenticated, logoutUser } = useUser()
-    
+
     const [seriesList, setSeriesList] = useState([])
     async function getSeries() {
         try {
@@ -26,17 +26,19 @@ export default function HomePage() {
     useEffect(() => {
         getSeries()
     }, [])
-    
+
     return (
         <SafeAreaView>
             <ScrollView>
-            {
-                isAuthenticated ?<View> <UserFormat user={user}/> <Button title="log out" onPress={()=>logoutUser()}/></View> : <Button title="login" onPress={()=>router.push("/loginPage")}/>
-            }
-           
-            {
-                seriesList.map((s, index) => (<SeriesFormat key={index} series={s}/>))
-            }
+                {
+                    isAuthenticated ? <View> <UserFormat user={user} /> <Button title="log out" onPress={() => logoutUser()} /></View> : <Button title="login" onPress={() => router.push("/loginPage")} />
+                }
+
+                <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{ marginTop: 10 }}>
+                    {seriesList.map((s, index) => (
+                        <SeriesFormat key={s._id || index} series={s} />
+                    ))}
+                </ScrollView>
             </ScrollView>
         </SafeAreaView>
     )
