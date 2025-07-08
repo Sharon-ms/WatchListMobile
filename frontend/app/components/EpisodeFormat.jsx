@@ -1,8 +1,8 @@
-import { SafeAreaView, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { SafeAreaView, Text, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import { useUser } from "../context/UserContext";
 
 export default function EpisodeFormat({ episode }) {
-    const { addToWatchList, watchList } = useUser();
+    const { addToWatchList, watchList, isAuthenticated } = useUser();
 
     const isWatched = watchList.some(wl => wl.episodeId === episode._id);
 
@@ -13,7 +13,7 @@ export default function EpisodeFormat({ episode }) {
 
             <TouchableOpacity
                 style={[styles.mark, isWatched ? styles.markWatched : styles.markUnwatched]}
-                onPress={() => addToWatchList(episode._id)}
+                onPress={() =>{ isAuthenticated ? addToWatchList(episode._id) : Alert.alert("please log in first")}}
                 accessibilityLabel={isWatched ? "Mark as unwatched" : "Mark as watched"}
             >
                 <Text style={styles.markText}>

@@ -66,6 +66,7 @@ export function UserProvider({ children }) {
                 user,
                 watchList,
                 isAuthenticated,
+                setIsAuthenticated,
                 loginUser,
                 loadWatchList,
                 addToWatchList,

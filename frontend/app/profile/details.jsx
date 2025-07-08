@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useUser } from "./context/UserContext";
+import { useUser } from "../context/UserContext";
 import { SafeAreaView, Text, Button, Modal, TextInput, Alert } from "react-native";
 import { useRouter } from "expo-router";
 import axios from "axios";
@@ -7,7 +7,7 @@ import Constants from 'expo-constants';
 
 export default function details() {
     const IP_URL = Constants.expoConfig.extra.IP_URL
-    const { user } = useUser()
+    const { user, setIsAuthenticated } = useUser()
     const router = useRouter()
     const [showModal, setShaowModal] = useState(false)
     const [currentPass, setCurrentPass] = useState("");
@@ -57,6 +57,7 @@ export default function details() {
                 await axios.delete(`http://${IP_URL}:3000/users/${user.userName}`);
                 await axios.delete(`http://${IP_URL}:3000/watched/${user.userName}`);
                 Alert.alert("account deleted")
+                setIsAuthenticated(false);
                 router.push('/')
             }}/>
         </SafeAreaView>

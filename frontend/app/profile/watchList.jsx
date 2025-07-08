@@ -10,11 +10,7 @@ export default function WatchList() {
     const { watchList } = useUser();
     const [episodes, setEpisodes] = useState([]);
     const [series, setSeries] = useState([]);
-    const allSeriesData = axios.get(`http://${IP_URL}:3000/series`);
-    const allSeries = allSeriesData.data;
-    const seriesIds = [...new Set(episodes.map(ep=>ep.seriesId))]
-    const filterSeries = allSeries.filter(s=> seriesIds.includes(s._id))
-    setSeries(filterSeries);
+
     useEffect(() => {
         async function fetchEpisodes() {
             try {
@@ -25,16 +21,11 @@ export default function WatchList() {
                 );
                 const episodeData = results.map(res => res.data);
                 setEpisodes(episodeData);
-                // const seriesResult = await Promise.all(
-                //     episodeData.map(ed =>
-                //         axios.get(`http:// 172.19.37.91:3000/series/${ed.seriesId}`)
-                //     )
-                // );
-                // const seriesChack = seriesResult.filter(s =>
-                //     !seriesChack.some(existing => JSON.stringify(existing) === JSON.stringify(s))
-                // );
-                // const seriesData = seriesChack.map(sc=> sc.data);
-                // setSeries(seriesData)
+                const allSeriesData = await axios.get(`http://${IP_URL}:3000/series`);
+                const allSeries = allSeriesData.data;
+                const seriesIds = [...new Set(episodeData.map(ep => ep.seriesId))]
+                const filterSeries = allSeries.filter(s => seriesIds.includes(s._id))
+                setSeries(filterSeries);
             } catch (err) {
                 console.error(err);
             }
@@ -56,7 +47,7 @@ export default function WatchList() {
                 )}
             /> */}
             {
-                series.map((s, index)=> <SeriesFormat key={index} series={s}/>)
+                series.map((s, index) => <SeriesFormat key={index} series={s} />)
             }
         </SafeAreaView>
     );
