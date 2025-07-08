@@ -12,12 +12,14 @@ export function UserProvider({ children }) {
 
     const [user, setUser] = useState(null);
     const [watchList, setWatchList] = useState([])
+    const [favorites, setFavorites] = useState([])
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     function loginUser(userData) {
         setUser(userData)
         setIsAuthenticated(true)
         loadWatchList(userData.userName)
+        loadFavorites(userData.userName)
     }
 
     async function loadWatchList(userName) {
@@ -25,6 +27,15 @@ export function UserProvider({ children }) {
             const result = await axios.get(`http://${IP_URL}:3000/watched/${userName}`)
             setWatchList(result.data)
         } catch (err) {
+            console.error(err.message);
+        }
+    }
+
+    async function loadFavorites(userName){
+        try{
+            const result = await axios.get(`http://${IP_URL}:3000/favorites/${userName}`)
+            setFavorites(result.data)
+        }catch(err){
             console.error(err.message);
         }
     }
@@ -54,6 +65,21 @@ export function UserProvider({ children }) {
         }
     }
 
+    async function addToFavorites(seriesId) {
+        try{
+            const newFavorite = {
+                userName: user.userName,
+                seriesId: seriesId
+            }
+            const alreadyFavorite = favorites.some(f=> f.seriesId === seriesId)
+            if(alreadyFavorite) return;
+            axios.post(`http://${IP_URL}:3000/favorites`, newFavorite)
+            loadFavorites(user.userName)
+        }catch(err){
+            console.error(err.message)
+        }
+    }
+
     function logoutUser() {
         setUser(null);
         setIsAuthenticated(false)
@@ -66,6 +92,9 @@ export function UserProvider({ children }) {
                 user,
                 watchList,
                 isAuthenticated,
+                favorites,
+                loadFavorites,
+                addToFavorites,
                 setIsAuthenticated,
                 loginUser,
                 loadWatchList,

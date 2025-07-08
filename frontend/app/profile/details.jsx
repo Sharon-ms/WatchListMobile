@@ -16,6 +16,7 @@ export default function details() {
     return (
         <SafeAreaView>
             <Text>My Account</Text>
+            <Button title="שנה תמונה" onPress={() => router.push('/Photo')} />
             <Text>{user.name}</Text>
             <Text>{user.userName}</Text>
             <Text>{user.password}</Text>

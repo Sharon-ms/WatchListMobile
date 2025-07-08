@@ -24,7 +24,7 @@ async function getAllSeries(req, res) {
 async function getSeriesById(req, res) {
     try{
         const {id} = req.params;
-        const result = await seriesModel.find({title: title});
+        const result = await seriesModel.find({_id: id});
         if(result.length === 0){
            return res.status(404).send("couldn't find a series whith that name")
         }

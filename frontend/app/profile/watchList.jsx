@@ -8,7 +8,6 @@ import Constants from 'expo-constants';
 export default function WatchList() {
     const IP_URL = Constants.expoConfig.extra.IP_URL
     const { watchList } = useUser();
-    const [episodes, setEpisodes] = useState([]);
     const [series, setSeries] = useState([]);
 
     useEffect(() => {
@@ -20,7 +19,6 @@ export default function WatchList() {
                     )
                 );
                 const episodeData = results.map(res => res.data);
-                setEpisodes(episodeData);
                 const allSeriesData = await axios.get(`http://${IP_URL}:3000/series`);
                 const allSeries = allSeriesData.data;
                 const seriesIds = [...new Set(episodeData.map(ep => ep.seriesId))]
