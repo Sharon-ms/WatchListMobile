@@ -23,7 +23,7 @@ export default function UserFormat({ user }) {
     return (
         <TouchableOpacity onPress={() => router.push('profile')}>
             {
-                user.photo ? <Image source={{ uri:`http://${IP_URL}:3000${user.photo}` }} style={{ width: 30,height: 30, borderRadius: 50 }} /> :
+                user.photo ? <Image source={{ uri:`http://${IP_URL}:3000${user.photo}` }} style={{ width: 70,height: 70, borderRadius: 50 }} /> :
                     <View style={styles.avatar}>
                         <Text style={styles.font}>{name}</Text>
                     </View>
@@ -35,8 +35,8 @@ export default function UserFormat({ user }) {
 
 const styles = StyleSheet.create({
     avatar: {
-        width: 30,
-        height: 30,
+        width: 70,
+        height: 70,
         borderRadius: 50,
         backgroundColor: "blue",
         alignItems: "center",

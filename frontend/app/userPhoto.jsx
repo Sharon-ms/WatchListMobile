@@ -1,12 +1,14 @@
 import { CameraView } from "expo-camera";
 import { useRef, useState } from 'react';
 import { useUser } from "./context/UserContext";
+import { useRouter } from "expo-router";
 import { View, TouchableOpacity, Image, Text, Alert, StyleSheet } from "react-native";
 import axios from 'axios';
 import Constants from 'expo-constants';
 import CameraPermission from "./components/CameraPermission";
 
 export default function UserPhoto() {
+    const router = useRouter()
     const [imageUri, setImageUri] = useState(null);
     const cameraRef = useRef();
     const { user } = useUser();
@@ -36,6 +38,7 @@ export default function UserPhoto() {
             });
 
             Alert.alert('Success', 'Profile picture uploaded!');
+            router.push('profile');
         } catch (err) {
             console.log('Upload error:', err.response?.status, err.response?.data || err.message);
             Alert.alert('Error', 'Failed to upload image');
