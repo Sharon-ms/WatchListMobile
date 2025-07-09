@@ -10,7 +10,7 @@ export default function seriesPage() {
     const IP_URL = Constants.expoConfig.extra.IP_URL
     const { seriesPage, startSeason, seriesID } = useLocalSearchParams();
     const [episodes, setEpisodes] = useState([])
-    const [series, setSeries] = useState([])
+    const [series, setSeries] = useState(null);
     const [seasonsAmount, setSeasonAmount] = useState(0);
     const [selectedSeason, setSelectedSeason] = useState(Number(startSeason) || 1);
 
@@ -18,11 +18,17 @@ export default function seriesPage() {
         try {
             const allSeries = await axios.get(`http://${IP_URL}:3000/series`);
             const findSeries = allSeries.data.find(se => se._id === seriesID);
-            setSeries(findSeries.data);
+            if (findSeries) {
+                setSeries(findSeries);
+                setSeasonAmount(findSeries.seasonsAmount || 1);
+            } else {
+                console.warn("Series not found with ID:", seriesID);
+            }
         } catch (err) {
-            console.error(err.message);
+            console.error("Error fetching series:", err.message);
         }
     }
+
     async function getEpisodes() {
         try {
             const episodesData = await axios.get(`http://${IP_URL}:3000/episodes?seriesId=${seriesPage}`);
@@ -48,19 +54,19 @@ export default function seriesPage() {
     useEffect(() => {
         getSeries();
         getEpisodes();
-        getSeasonAmount();
         setSelectedSeason(Number(startSeason) || 1);
     }, [seriesPage]);
+
     let filterEpisodes = episodes.filter(ep => ep.seasonNum === selectedSeason)
-    const seasonArray = Array.from({ length: seasonsAmount })
+    const seasonArray = Array.from({ length: seasonsAmount }, (_, i) => i + 1);
     return (
         <SafeAreaView>
             <ScrollView>
-                {}
-                <Image
-                    source={{ uri: series.image }}
-                    style={styles.image} />
-                <Text>{series.title}</Text>
+                {series && series.image && (
+                    <Image source={{ uri: series.image }} style={styles.image} />
+                )}
+                {series?.title && <Text>{series.title}</Text>}
+
                 <Picker
                     selectedValue={selectedSeason}
                     onValueChange={(itemValue) => setSelectedSeason(itemValue)}

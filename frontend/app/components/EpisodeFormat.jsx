@@ -11,15 +11,7 @@ export default function EpisodeFormat({ episode }) {
             <Text style={styles.episodeNum}>Episode {episode.episodeNum}</Text>
             <Text style={styles.title}>{episode.title}</Text>
 
-            {/* <TouchableOpacity
-                style={[styles.mark, isWatched ? styles.markWatched : styles.markUnwatched]}
-                onPress={() =>{ isAuthenticated ? ( checkAlreadyWatched(episode) ? deleteFromWatchList(episode._id) : addToWatchList(episode._id) ) : Alert.alert("please log in first")}}
-                accessibilityLabel={isWatched ? "Mark as unwatched" : "Mark as watched"}
-            >
-                <Text style={styles.markText}>
-                    {isWatched ? "✓" : "+"}
-                </Text>
-            </TouchableOpacity> */}
+
             <TouchableOpacity
                 style={[
                     styles.mark,
