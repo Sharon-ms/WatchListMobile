@@ -1,6 +1,7 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity, Button, Alert } from "react-native";
 import { useRouter } from "expo-router";
 import { useUser } from "../context/UserContext";
+import seriesPage from "../seriesDetails/[seriesPage]";
 
 export default function SeriesFormat({ series, lastWatchedEpisode}) {
   
@@ -13,6 +14,7 @@ export default function SeriesFormat({ series, lastWatchedEpisode}) {
     <TouchableOpacity onPress={() => router.push({
       pathname: `seriesDetails/${series._id}`,
       params: {
+        seriesID: series._id,
         startSeason: lastWatchedEpisode?.seasonNum ?? 1
       }
     })}>

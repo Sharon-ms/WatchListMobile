@@ -31,11 +31,11 @@ export function UserProvider({ children }) {
         }
     }
 
-    async function loadFavorites(userName){
-        try{
+    async function loadFavorites(userName) {
+        try {
             const result = await axios.get(`http://${IP_URL}:3000/favorites/${userName}`)
             setFavorites(result.data)
-        }catch(err){
+        } catch (err) {
             console.error(err.message);
         }
     }
@@ -54,34 +54,36 @@ export function UserProvider({ children }) {
     }
 
     async function deleteFromWatchList(episodeId) {
-        try{
+        try {
             await axios.delete(`http://${IP_URL}:3000/watched?userName=${user.userName}&episodeId=${episodeId}`)
             loadWatchList(user.userName)
-        }catch(err){
+        } catch (err) {
             console.error(err.message);
         }
     }
 
     async function addToFavorites(seriesId) {
-        try{
+        try {
             const newFavorite = {
                 userName: user.userName,
                 seriesId: seriesId
             }
-            const alreadyFavorite = favorites.some(f=> f.seriesId === seriesId)
-            if(alreadyFavorite) return;
+            const alreadyFavorite = favorites.some(f => f.seriesId === seriesId)
+            if (alreadyFavorite) return;
             axios.post(`http://${IP_URL}:3000/favorites`, newFavorite)
             loadFavorites(user.userName)
-        }catch(err){
+        } catch (err) {
             console.error(err.message)
         }
     }
 
-        async function deleteFavorite(seriesId) {
-        try{
+    async function deleteFavorite(seriesId) {
+        try {
+            const alreadyFavorite = favorites.some(f => f.seriesId === seriesId)
+            if (!alreadyFavorite) return;
             await axios.delete(`http://${IP_URL}:3000/favorites?userName=${user.userName}&seriesId=${seriesId}`)
             loadFavorites(user.userName)
-        }catch(err){
+        } catch (err) {
             console.error(err.message);
         }
     }
