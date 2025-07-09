@@ -1,5 +1,6 @@
+require('dotenv').config()
 const mongoose = require('mongoose');
-const DB_URL = "mongodb+srv://user:123@cluster0.dhc8e.mongodb.net/watchList"
+const DB_URL = process.env.DB_LINK
 const connect = async () => {
     try {
         await mongoose.connect(DB_URL);

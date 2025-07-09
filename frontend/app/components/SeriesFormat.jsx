@@ -42,7 +42,7 @@ export default function SeriesFormat({ series, lastWatchedEpisode}) {
               addToFavorites(series._id);
             }
           }}>
-          <Text>{!isFavorite ? "👁️" : "🚫"}</Text>
+          <Text style={{fontSize:16}}>{isFavorite ? "❤️" : "♡"}</Text>
         </TouchableOpacity>
 
       </View >
