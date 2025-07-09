@@ -46,9 +46,6 @@ export function UserProvider({ children }) {
                 userName: user.userName,
                 episodeId: episodeId
             }
-            const alreadyWatched = watchList.some(wl => wl.episodeId === newWatched.episodeId);
-            if (alreadyWatched) return;
-
             await axios.post(`http://${IP_URL}:3000/watched`, newWatched)
             loadWatchList(user.userName);
         } catch (err) {
@@ -56,7 +53,7 @@ export function UserProvider({ children }) {
         }
     }
 
-    async function daleteFromWatchList(episodeId) {
+    async function deleteFromWatchList(episodeId) {
         try{
             await axios.delete(`http://${IP_URL}:3000/watched?userName=${user.userName}&episodeId=${episodeId}`)
             loadWatchList(user.userName)
@@ -100,7 +97,7 @@ export function UserProvider({ children }) {
                 loadWatchList,
                 addToWatchList,
                 logoutUser,
-                daleteFromWatchList
+                deleteFromWatchList,
             }}>
             {children}
         </userContext.Provider>

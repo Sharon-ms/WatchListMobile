@@ -1,9 +1,10 @@
 import { SafeAreaView, Text, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import { useUser } from "../context/UserContext";
+import { useState, useEffect } from "react";
+
 
 export default function EpisodeFormat({ episode }) {
-    const { addToWatchList, watchList, isAuthenticated } = useUser();
-
+    const { addToWatchList, watchList, isAuthenticated, deleteFromWatchList } = useUser();
     const isWatched = watchList.some(wl => wl.episodeId === episode._id);
 
     return (
@@ -11,15 +12,39 @@ export default function EpisodeFormat({ episode }) {
             <Text style={styles.episodeNum}>Episode {episode.episodeNum}</Text>
             <Text style={styles.title}>{episode.title}</Text>
 
-            <TouchableOpacity
+            {/* <TouchableOpacity
                 style={[styles.mark, isWatched ? styles.markWatched : styles.markUnwatched]}
-                onPress={() =>{ isAuthenticated ? addToWatchList(episode._id) : Alert.alert("please log in first")}}
+                onPress={() =>{ isAuthenticated ? ( checkAlreadyWatched(episode) ? deleteFromWatchList(episode._id) : addToWatchList(episode._id) ) : Alert.alert("please log in first")}}
                 accessibilityLabel={isWatched ? "Mark as unwatched" : "Mark as watched"}
             >
                 <Text style={styles.markText}>
                     {isWatched ? "✓" : "+"}
                 </Text>
+            </TouchableOpacity> */}
+            <TouchableOpacity
+                style={[
+                    styles.mark,
+                    isWatched ? styles.markWatched : styles.markUnwatched,
+                ]}
+                onPress={() => {
+                    if (!isAuthenticated) {
+                        Alert.alert("Please log in first");
+                        return;
+                    }
+
+                    if (isWatched) {
+                        deleteFromWatchList(episode._id);
+                    } else {
+                        addToWatchList(episode._id);
+                    }
+
+
+                }}
+                accessibilityLabel={isWatched ? "Mark as unwatched" : "Mark as watched"}
+            >
+                <Text style={styles.markText}>{isWatched ? "✓" : "+"}</Text>
             </TouchableOpacity>
+
         </SafeAreaView>
     );
 }
