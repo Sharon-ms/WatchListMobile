@@ -4,6 +4,7 @@ import { SafeAreaView, Text, Button, Modal, TextInput, Alert } from "react-nativ
 import { useRouter } from "expo-router";
 import axios from "axios";
 import Constants from 'expo-constants';
+import UserFormat from "../components/UserFormat";
 
 export default function details() {
     const IP_URL = Constants.expoConfig.extra.IP_URL
@@ -16,7 +17,8 @@ export default function details() {
     return (
         <SafeAreaView>
             <Text>My Account</Text>
-            <Button title="שנה תמונה" onPress={() => router.push('/Photo')} />
+            <UserFormat user={user}/>
+            <Button title="add picture" onPress={() => router.push('/userPhoto')} />
             <Text>{user.name}</Text>
             <Text>{user.userName}</Text>
             <Text>{user.password}</Text>

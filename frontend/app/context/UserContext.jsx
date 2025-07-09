@@ -102,6 +102,7 @@ export function UserProvider({ children }) {
                 watchList,
                 isAuthenticated,
                 favorites,
+                setUser,
                 loadFavorites,
                 addToFavorites,
                 setIsAuthenticated,

@@ -10,7 +10,7 @@ export default function appLayout() {
                 <Stack.Screen name="registerPage" options={{ title: "register-page" }} />
                 <Stack.Screen name="myFavorites" options={{ title: "my-favorites" }} />
                 <Stack.Screen name="seriesDetails/[seriesPage]" options={{ title: "series-page" }} />
-                <Stack.Screen name="Photo" options={{title: "user-photo"}}/>
+                <Stack.Screen name="userPhoto" options={{title: "user-photo"}}/>
             </Stack >
         </UserProvider>
     )

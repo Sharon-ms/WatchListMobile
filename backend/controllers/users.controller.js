@@ -1,4 +1,5 @@
 const usersModel = require('../models/users.model');
+const path = require('path')
 
 async function sighnUp(req, res) {
     try {
@@ -81,11 +82,16 @@ async function deleteUser(req, res) {
 async function updateUserPhoto(req, res) {
     try {
         const { userName } = req.params;
-        const { photo } = req.body;
-
+        console.log("req.file:", req.file);
+        console.log("req.body:", req.body);
+        console.log("req.params:", req.params);
+        if (!req.file) {
+            return res.status(400).send("no file uploaded")
+        }
+        const photoPath = `/uploads/${req.file.filename}`
         const updatedUser = await usersModel.findOneAndUpdate(
             { userName },
-            { photo },
+            { photo: photoPath },
             { new: true }
         );
 
