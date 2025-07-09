@@ -77,6 +77,16 @@ export function UserProvider({ children }) {
         }
     }
 
+        async function deleteFavorite(seriesId) {
+        try{
+            await axios.delete(`http://${IP_URL}:3000/favorites?userName=${user.userName}&seriesId=${seriesId}`)
+            loadFavorites(user.userName)
+        }catch(err){
+            console.error(err.message);
+        }
+    }
+
+
     function logoutUser() {
         setUser(null);
         setIsAuthenticated(false)
@@ -98,6 +108,7 @@ export function UserProvider({ children }) {
                 addToWatchList,
                 logoutUser,
                 deleteFromWatchList,
+                deleteFavorite
             }}>
             {children}
         </userContext.Provider>

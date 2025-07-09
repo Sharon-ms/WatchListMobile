@@ -13,17 +13,28 @@ async function addFavorite(req, res) {
 async function getFavoritesOfUser(req, res) {
     try {
         const { userName } = req.params;
-        const result = await favoritesModel.find({userName: userName})
-        if(!result || result.length === 0){
+        const result = await favoritesModel.find({ userName: userName })
+        if (!result || result.length === 0) {
             return res.status(404).send("not found");
         }
         res.status(200).send(result);
-    }catch(err){
+    } catch (err) {
         res.status(500).send(err.message);
+    }
+}
+
+async function deleteOneFavorite(req, res) {
+    try {
+        const { userName, seriesId } = req.query;
+        const result = await favoritesModel.deleteOne({ userName: userName, seriesId: seriesId })
+        res.status(200).send(`Deleted ${result.deletedCount} favorite show for user ${userName}`)
+    } catch (err) {
+        res.status(200).send(err.message);
     }
 }
 
 module.exports = {
     getFavoritesOfUser,
-    addFavorite
+    addFavorite,
+    deleteOneFavorite
 }

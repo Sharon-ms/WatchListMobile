@@ -1,16 +1,19 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity, Button, Alert } from "react-native";
 import { useRouter } from "expo-router";
 import { useUser } from "../context/UserContext";
-export default function SeriesFormat({ series, lastWatchedEpisode }) {
-  const { addToFavorites, isAuthenticated, favorites } = useUser();
+
+export default function SeriesFormat({ series, lastWatchedEpisode}) {
+  
+  const { addToFavorites, isAuthenticated, favorites, deleteFavorite } = useUser();
   const isFavorite = favorites.some(fav => fav.seriesId === series._id)
   if (!series) return null;
   const router = useRouter()
+
   return (
     <TouchableOpacity onPress={() => router.push({
       pathname: `seriesDetails/${series._id}`,
       params: {
-        startSeason: lastWatchedEpisode?.seasonNum ?? 1  
+        startSeason: lastWatchedEpisode?.seasonNum ?? 1
       }
     })}>
       <View style={styles.card}>
@@ -25,12 +28,23 @@ export default function SeriesFormat({ series, lastWatchedEpisode }) {
           </Text>
         )}
         <TouchableOpacity style={styles.mark}
-          onPress={() => { isAuthenticated ? addToFavorites(series._id) : Alert.alert("log in first") }}>
+          onPress={() => {
+            if (!isAuthenticated) {
+              Alert.alert("Please log in first");
+              return;
+            }
+
+            if (isFavorite) {
+              deleteFavorite(series._id);
+            } else {
+              addToFavorites(series._id);
+            }
+          }}>
           <Text>{!isFavorite ? "👁️" : "🚫"}</Text>
         </TouchableOpacity>
 
-      </View>
-    </TouchableOpacity>
+      </View >
+    </TouchableOpacity >
 
   );
 }

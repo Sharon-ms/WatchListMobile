@@ -1,6 +1,5 @@
 import { SafeAreaView, Text, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import { useUser } from "../context/UserContext";
-import { useState, useEffect } from "react";
 
 
 export default function EpisodeFormat({ episode }) {
@@ -37,8 +36,6 @@ export default function EpisodeFormat({ episode }) {
                     } else {
                         addToWatchList(episode._id);
                     }
-
-
                 }}
                 accessibilityLabel={isWatched ? "Mark as unwatched" : "Mark as watched"}
             >

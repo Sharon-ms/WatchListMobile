@@ -4,6 +4,9 @@ const router = express.Router();
 
 router.get('/:userName', favoritesController.getFavoritesOfUser);
 
-router.post('/', favoritesController.addFavorite)
+router.post('/', favoritesController.addFavorite);
+
+router.delete('/', favoritesController.deleteOneFavorite);
+
 
 module.exports = router
