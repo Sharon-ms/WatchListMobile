@@ -1,14 +1,15 @@
 import { CameraView } from "expo-camera";
 import { useRef, useState } from 'react';
 import { useUser } from "./context/UserContext";
-import { View, TouchableOpacity, Image, Text, Alert } from "react-native";
+import { View, TouchableOpacity, Image, Text, Alert, StyleSheet } from "react-native";
 import axios from 'axios';
 import Constants from 'expo-constants';
 import CameraPermission from "./components/CameraPermission";
-export default function userPhoto() {
+
+export default function UserPhoto() {
     const [imageUri, setImageUri] = useState(null);
     const cameraRef = useRef();
-    const { user } = useUser()
+    const { user } = useUser();
     const IP_URL = Constants.expoConfig.extra.IP_URL;
 
     async function takePicture() {
@@ -16,59 +17,99 @@ export default function userPhoto() {
             const picture = await cameraRef.current.takePictureAsync();
             setImageUri(picture.uri);
         }
-    };
+    }
 
     const uploadImage = async () => {
-    if (!imageUri) return;
+        if (!imageUri) return;
 
-    const formData = new FormData();
-    formData.append('photo', {
-        uri: imageUri,
-        name: `${user.userName}.jpg`,
-        type: 'image/jpeg',
-    });
-
-    try {
-        console.log('Sending request...');
-        
-        const response = await axios.put(`http://${IP_URL}:3000/users/photo/${user.userName}`, formData, {
-            headers: { 'Content-Type': 'multipart/form-data' },
-            timeout: 30000, // 30 שניות
+        const formData = new FormData();
+        formData.append('photo', {
+            uri: imageUri,
+            name: `${user.userName}.jpg`,
+            type: 'image/jpeg',
         });
-        
-        console.log('Response received:', response.status);
-        console.log('Response data:', response.data);
-        
-        Alert.alert('Success', 'Profile picture uploaded!');
-    } catch (err) {
-        console.log('Error caught:', err.response?.status, err.response?.data || err.message);
-        Alert.alert('Error', 'Failed to upload image');
-    }
-};
+
+        try {
+            const response = await axios.put(`http://${IP_URL}:3000/users/photo/${user.userName}`, formData, {
+                headers: { 'Content-Type': 'multipart/form-data' },
+                timeout: 30000,
+            });
+
+            Alert.alert('Success', 'Profile picture uploaded!');
+        } catch (err) {
+            console.log('Upload error:', err.response?.status, err.response?.data || err.message);
+            Alert.alert('Error', 'Failed to upload image');
+        }
+    };
+
     return (
-        <View>
+        <View style={styles.container}>
             <CameraPermission />
             {!imageUri ? (
-                <CameraView ref={cameraRef} facing="front" />
+                <CameraView
+                    ref={cameraRef}
+                    facing="front"
+                    style={styles.camera}
+                />
             ) : (
-                <Image source={{ uri: imageUri }} style={{width:50, height:50, borderRadius:80}} />
+                <Image source={{ uri: imageUri }} style={styles.preview} />
             )}
-            <View>
+
+            <View style={styles.buttonsContainer}>
                 {!imageUri ? (
-                    <TouchableOpacity onPress={takePicture}>
-                        <Text>Take Picture</Text>
+                    <TouchableOpacity style={styles.button} onPress={takePicture}>
+                        <Text style={styles.buttonText}>📸 Take Picture</Text>
                     </TouchableOpacity>
                 ) : (
                     <>
-                        <TouchableOpacity onPress={() => setImageUri(null)}>
-                            <Text>Retake</Text>
+                        <TouchableOpacity style={styles.button} onPress={() => setImageUri(null)}>
+                            <Text style={styles.buttonText}>🔁 Retake</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={uploadImage}>
-                            <Text>Save</Text>
+                        <TouchableOpacity style={styles.button} onPress={uploadImage}>
+                            <Text style={styles.buttonText}>💾 Save</Text>
                         </TouchableOpacity>
                     </>
                 )}
             </View>
         </View>
-    )
+    );
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: '#fff',
+        paddingTop: 40,
+        alignItems: 'center',
+    },
+    camera: {
+        width: '90%',
+        height: 400,
+        borderRadius: 16,
+        overflow: 'hidden',
+    },
+    preview: {
+        width: 300,
+        height: 300,
+        borderRadius: 16,
+        marginVertical: 20,
+    },
+    buttonsContainer: {
+        marginTop: 20,
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        width: '100%',
+        paddingHorizontal: 20,
+    },
+    button: {
+        backgroundColor: '#007AFF',
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        borderRadius: 10,
+        marginHorizontal: 5,
+    },
+    buttonText: {
+        color: '#fff',
+        fontSize: 16,
+    },
+});

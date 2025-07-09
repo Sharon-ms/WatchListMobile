@@ -21,7 +21,7 @@ export default function UserFormat({ user }) {
     }, [])
 
     return (
-        <TouchableOpacity onPress={() => router.push('profile/details')}>
+        <TouchableOpacity onPress={() => router.push('profile')}>
             {
                 user.photo ? <Image source={{ uri:`http://${IP_URL}:3000${user.photo}` }} style={{ width: 30,height: 30, borderRadius: 50 }} /> :
                     <View style={styles.avatar}>
