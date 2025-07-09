@@ -14,12 +14,6 @@ export default {
       resizeMode: "contain",
       backgroundColor: "#ffffff"
     },
-    ios: {
-      infoPlist: {
-        NSCameraUsageDescription: "אנחנו צריכים להשתמש במצלמה כדי לצלם תמונות",
-        NSPhotoLibraryUsageDescription: "אנחנו צריכים גישה לגלריה כדי להעלות תמונות",
-      }
-    },
     android: {
       permissions: [
         "CAMERA",

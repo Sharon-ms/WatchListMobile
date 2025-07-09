@@ -17,18 +17,17 @@ export default function UploadPhotoScreen() {
   const pickImage = async () => {
     const permission = await ImagePicker.requestCameraPermissionsAsync();
     if (!permission.granted) {
-      alert("צריך הרשאה למצלמה כדי להמשיך");
+      Alert.alert("no permission");
       return;
     }
 
     const result = await ImagePicker.launchCameraAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
       quality: 0.5,
       base64: false,
     });
 
-    if (!result.cancelled) {
-      setImage(result.uri);
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
     }
   };
 
@@ -36,15 +35,23 @@ export default function UploadPhotoScreen() {
     if (!image) return;
     setLoading(true);
 
-    try {
-      // נשלח את כתובת ה-URI כמו שהיא - נניח שאתה מקבל URI כזה ושומר אותו
-      await axios.put(`http://${Constants.expoConfig.extra.IP_URL}:3000/users/photo/${user.userName}`, {
-        photo: image,
-      });
+    const formData = new FormData();
+    formData.append("photo", {
+      uri: image,
+      type: "image/jpeg",
+      name: `${user.userName}.jpg`,
+    });
 
-      setUser({ ...user, photo: image }); // עדכון בקונטקסט
+    try {
+      await axios.put(`http://${Constants.expoConfig.extra.IP_URL}:3000/users/photo/${user.userName}`, formData,);
+
+      // שמירה של כתובת התמונה החדשה (בשרת)
+      console.log("נשלח ל:", `http://${Constants.expoConfig.extra.IP_URL}:3000/users/photo/${user.userName}`);
+      const newPhotoPath = `http://${Constants.expoConfig.extra.IP_URL}:3000/uploads/${user.userName}.jpg`;
+      setUser({ ...user, photo: newPhotoPath });
+      console.log(user)
       Alert.alert("הצלחה", "תמונת הפרופיל עודכנה!");
-      router.back(); // חזרה למסך הקודם
+      router.back();
     } catch (err) {
       console.error(err);
       Alert.alert("שגיאה", "לא הצלחנו להעלות את התמונה");
