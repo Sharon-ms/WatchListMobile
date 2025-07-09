@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import SeriesFormat from "../components/SeriesFormat"
 import Constants from 'expo-constants';
 
+
+
 export default function WatchList() {
     const IP_URL = Constants.expoConfig.extra.IP_URL
     const { watchList } = useUser();
