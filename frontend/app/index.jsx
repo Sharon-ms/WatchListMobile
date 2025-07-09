@@ -1,47 +1,641 @@
+// import { useUser } from "./context/UserContext";
+// import { useRouter } from "expo-router";
+// import { useState, useEffect } from "react";
+// import { SafeAreaView, Button, ScrollView, View, Text, TextInput, FlatList } from "react-native";
+// import axios from "axios";
+// import UserFormat from "./components/UserFormat";
+// import SeriesFormat from "./components/SeriesFormat";
+// import Constants from 'expo-constants';
+// import { Picker } from '@react-native-picker/picker';
+// import { Dimensions } from 'react-native';
+
+
+// export default function HomePage() {
+
+//     const router = useRouter()
+//     const IP_URL = Constants.expoConfig.extra.IP_URL
+//     const { user, isAuthenticated, logoutUser } = useUser()
+//     const [seriesList, setSeriesList] = useState([])
+//     const [searchQuery, setSearchQuery] = useState("");
+//     const [selectedYear, setSelectedYear] = useState("");
+//     const [selectedGenre, setSelectedGenre] = useState("");
+//     const currentYear = new Date().getFullYear();
+//     const [years, setYears] = useState([]);
+//     const [genres, setGenres] = useState([]);
+//     const [recentSeries, setRecentSeries] = useState([]);
+
+//     async function getSeries() {
+//         try {
+//             const response = await axios.get(`http://${IP_URL}:3000/series`);
+//             const data = response.data;
+//             setSeriesList(data);
+
+//             // חישוב שנים
+//             const uniqueYears = [...new Set(data.map(s => s.year).filter(Boolean))].sort((a, b) => b - a);
+//             setYears(uniqueYears);
+
+//             // חישוב ז'אנרים
+//             const uniqueGenres = [...new Set(data.map(s => s.genre).filter(Boolean))];
+//             setGenres(uniqueGenres);
+
+//             // חישוב סדרות מהשנה האחרונה
+//             const currentYear = new Date().getFullYear();
+//             const recent = data.filter(s => Number(s.year) >= currentYear - 1);
+//             setRecentSeries(recent);
+
+//         } catch (err) {
+//             console.log("error", err);
+//         }
+//     }
+
+//     const filteredSeries = seriesList.filter((s) => {
+//         const matchesTitle = s.title.toLowerCase().includes(searchQuery.toLowerCase());
+//         const matchesYear = selectedYear ? s.year?.toString() === selectedYear : true;
+//         const matchesGenre = selectedGenre ? s.genre === selectedGenre : true;
+//         return matchesTitle && matchesYear && matchesGenre;
+//     });
+
+//     useEffect(() => {
+//         getSeries()
+//     }, [])
+
+
+//     return (
+//         <SafeAreaView>
+//             <ScrollView>
+//                 {
+//                     isAuthenticated ? <View> <UserFormat user={user} /> <Button title="log out" onPress={() => logoutUser()} /></View> : <Button title="login" onPress={() => router.push("/loginPage")} />
+//                 }
+//                 <TextInput
+//                     placeholder="חפש סדרה לפי שם"
+//                     value={searchQuery}
+//                     onChangeText={setSearchQuery}
+//                     style={{
+//                         borderWidth: 1,
+//                         borderColor: "#ccc",
+//                         padding: 8,
+//                         borderRadius: 8,
+//                         marginBottom: 10
+//                     }}
+//                 />
+
+//                 <Text>סינון לפי שנה:</Text>
+//                 <Picker
+//                     selectedValue={selectedYear}
+//                     onValueChange={(itemValue) => setSelectedYear(itemValue)}
+//                     style={{ marginBottom: 10 }}
+//                 >
+//                     <Picker.Item label="הצג הכול" value="" />
+//                     {years.map((year) => (
+//                         <Picker.Item key={year} label={year.toString()} value={year.toString()} />
+//                     ))}
+//                 </Picker>
+
+//                 <Text>סינון לפי ז'אנר:</Text>
+//                 <Picker
+//                     selectedValue={selectedGenre}
+//                     onValueChange={(itemValue) => setSelectedGenre(itemValue)}
+//                     style={{ marginBottom: 10 }}
+//                 >
+//                     <Picker.Item label="הצג הכול" value="" />
+//                     {genres.map((genre) => (
+//                         <Picker.Item key={genre} label={genre} value={genre} />
+//                     ))}
+//                 </Picker>
+//                 <Text style={{ fontWeight: 'bold', fontSize: 16, marginVertical: 10 }}>תוצאות חיפוש / סינון</Text>
+//                 <FlatList
+//                     data={filteredSeries}
+//                     keyExtractor={(item) => item._id?.toString() ?? item.title}
+//                     renderItem={({ item }) => (
+//                         <View style={{
+//                             width: (Dimensions.get("window").width - 40) / 3,
+//                             marginBottom: 15
+//                         }}>
+//                             <SeriesFormat series={item} />
+//                         </View>
+//                     )}
+//                     numColumns={3}
+//                     columnWrapperStyle={{ justifyContent: 'space-between' }}
+//                 />
+
+
+//                 <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{ marginTop: 10 }}>
+//                     {seriesList.map((s, index) => (
+//                         <SeriesFormat key={s._id || index} series={s} />
+//                     ))}
+//                 </ScrollView>
+//                 <Text style={{ fontWeight: 'bold', fontSize: 16, marginVertical: 10 }}>סדרות מהשנה האחרונה</Text>
+//                 <FlatList
+//                     horizontal
+//                     data={recentSeries}
+//                     keyExtractor={(item) => item._id?.toString() ?? item.title}
+//                     renderItem={({ item }) => (
+//                         <View style={{ marginRight: 10 }}>
+//                             <SeriesFormat series={item} />
+//                         </View>
+//                     )}
+//                     showsHorizontalScrollIndicator={false}
+//                     style={{ marginBottom: 20 }}
+//                 />
+
+
+
+//             </ScrollView>
+//         </SafeAreaView>
+//     )
+
+// }
+// import { useUser } from "./context/UserContext";
+// import { useRouter } from "expo-router";
+// import { useState, useEffect } from "react";
+// import { SafeAreaView, Button, ScrollView, View, Text, TextInput, FlatList,Dimensions,KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard } from "react-native";
+// import axios from "axios";
+// import Constants from 'expo-constants';
+// import { Picker } from '@react-native-picker/picker';
+
+// import UserFormat from "./components/UserFormat";
+// import SeriesFormat from "./components/SeriesFormat";
+
+
+
+
+// export default function HomePage() {
+//     const router = useRouter();
+//     const IP_URL = Constants.expoConfig.extra.IP_URL;
+//     const { user, isAuthenticated, logoutUser } = useUser();
+
+//     const [seriesList, setSeriesList] = useState([]);
+//     const [searchQuery, setSearchQuery] = useState("");
+//     const [selectedYear, setSelectedYear] = useState("");
+//     const [selectedGenre, setSelectedGenre] = useState("");
+//     const [showAdvancedSearch, setShowAdvancedSearch] = useState(false);
+
+//     const [years, setYears] = useState([]);
+//     const [genres, setGenres] = useState([]);
+//     const [recentSeries, setRecentSeries] = useState([]);
+//     const [comedySeries, setComedySeries] = useState([]);
+//     const [dramaSeries, setDramaSeries] = useState([]);
+
+//     useEffect(() => {
+//         getSeries();
+//     }, []);
+
+//     async function getSeries() {
+//         try {
+//             const response = await axios.get(`http://${IP_URL}:3000/series`);
+//             const data = response.data;
+//             setSeriesList(data);
+
+//             const currentYear = new Date().getFullYear();
+
+//             setYears([...new Set(data.map(s => s.year).filter(Boolean))].sort((a, b) => b - a));
+//             const allGenres = data.flatMap(s => s.genre || []);
+//             setGenres([...new Set(allGenres)]);
+//             setRecentSeries(data.filter(s => Number(s.year) >= currentYear - 1));
+//             setComedySeries(data.filter(s => s.genre?.map(g => g.toLowerCase()).includes("comedy")));
+//             setDramaSeries(data.filter(s => s.genre?.map(g => g.toLowerCase()).includes("drama")));
+
+
+//         } catch (err) {
+//             console.log("Error fetching series:", err);
+//         }
+//     }
+
+//     const filteredSeries = seriesList.filter((s) => {
+//         const matchesTitle = s.title.toLowerCase().includes(searchQuery.toLowerCase());
+//         const matchesYear = selectedYear ? s.year?.toString() === selectedYear : true;
+//         const matchesGenre = selectedGenre ? s.genre?.includes(selectedGenre) : true;
+//         return matchesTitle && matchesYear && matchesGenre;
+//     });
+
+//     return (
+//         <SafeAreaView>
+//             <ScrollView contentContainerStyle={{ padding: 10 }}>
+//                 {
+//                     isAuthenticated ? (
+//                         <View>
+//                             <UserFormat user={user} />
+//                             <Button title="log out" onPress={() => logoutUser()} />
+//                         </View>
+//                     ) : (
+//                         <Button title="login" onPress={() => router.push("/loginPage")} />
+//                     )
+//                 }
+
+//                 <Button
+//                     title={showAdvancedSearch ? "Back to Default View" : "Advanced Search"}
+//                     onPress={() => {
+//                         setShowAdvancedSearch(prev => !prev);
+//                         setSearchQuery("");
+//                         setSelectedYear("");
+//                         setSelectedGenre("");
+//                     }}
+//                 />
+
+//                 {showAdvancedSearch ? (
+//                     <>
+//                         <TextInput
+//                             placeholder="Search by title"
+//                             value={searchQuery}
+//                             onChangeText={setSearchQuery}
+//                             style={{
+//                                 borderWidth: 1,
+//                                 borderColor: "#ccc",
+//                                 padding: 8,
+//                                 borderRadius: 8,
+//                                 marginVertical: 10
+//                             }}
+//                         />
+
+//                         <Text>Filter by year:</Text>
+//                         <Picker
+//                             selectedValue={selectedYear}
+//                             onValueChange={setSelectedYear}
+//                             style={{ marginBottom: 10 }}
+//                         >
+//                             <Picker.Item label="All" value="" />
+//                             {years.map((year) => (
+//                                 <Picker.Item key={year} label={year.toString()} value={year.toString()} />
+//                             ))}
+//                         </Picker>
+
+//                         <Text>Filter by genre:</Text>
+//                         <Picker
+//                             selectedValue={selectedGenre}
+//                             onValueChange={setSelectedGenre}
+//                             style={{ marginBottom: 10 }}
+//                         >
+//                             <Picker.Item label="All" value="" />
+//                             {genres.map((genre) => (
+//                                 <Picker.Item key={genre} label={genre} value={genre} />
+//                             ))}
+//                         </Picker>
+
+//                         <Text style={{ fontWeight: 'bold', fontSize: 16, marginVertical: 10 }}>Search Results</Text>
+//                         <FlatList
+//                             data={filteredSeries}
+//                             keyExtractor={(item) => item._id?.toString() ?? item.title}
+//                             renderItem={({ item }) => (
+//                                 <View style={{
+//                                     width: (Dimensions.get("window").width - 40) / 3,
+//                                     marginBottom: 15
+//                                 }}>
+//                                     <SeriesFormat series={item} />
+//                                 </View>
+//                             )}
+//                             numColumns={3}
+//                             columnWrapperStyle={{ justifyContent: 'space-between' }}
+//                         />
+//                     </>
+//                 ) : (
+//                     <>
+//                         <Text style={{ fontWeight: 'bold', fontSize: 16, marginVertical: 10 }}>Recent Releases</Text>
+//                         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginBottom: 20 }}>
+//                             {recentSeries.map((s, index) => (
+//                                 <View key={s._id || index} style={{ marginRight: 10 }}>
+//                                     <SeriesFormat series={s} />
+//                                 </View>
+//                             ))}
+//                         </ScrollView>
+
+//                         <Text style={{ fontWeight: 'bold', fontSize: 16, marginVertical: 10 }}>Comedy</Text>
+//                         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginBottom: 20 }}>
+//                             {comedySeries.map((s, index) => (
+//                                 <View key={s._id || index} style={{ marginRight: 10 }}>
+//                                     <SeriesFormat series={s} />
+//                                 </View>
+//                             ))}
+//                         </ScrollView>
+
+//                         <Text style={{ fontWeight: 'bold', fontSize: 16, marginVertical: 10 }}>Drama</Text>
+//                         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginBottom: 20 }}>
+//                             {dramaSeries.map((s, index) => (
+//                                 <View key={s._id || index} style={{ marginRight: 10 }}>
+//                                     <SeriesFormat series={s} />
+//                                 </View>
+//                             ))}
+//                         </ScrollView>
+//                     </>
+//                 )}
+//             </ScrollView>
+//         </SafeAreaView>
+//     );
+// }
 import { useUser } from "./context/UserContext";
 import { useRouter } from "expo-router";
 import { useState, useEffect } from "react";
-import { SafeAreaView, Button, ScrollView, View, Text } from "react-native";
+import {
+    SafeAreaView,
+    Button,
+    ScrollView,
+    View,
+    Text,
+    TextInput,
+    FlatList,
+    Dimensions,
+    KeyboardAvoidingView,
+    Platform,
+    TouchableWithoutFeedback,
+    Keyboard,
+} from "react-native";
 import axios from "axios";
+import Constants from "expo-constants";
+import { Picker } from "@react-native-picker/picker";
+
 import UserFormat from "./components/UserFormat";
 import SeriesFormat from "./components/SeriesFormat";
-import Constants from 'expo-constants';
 
 export default function HomePage() {
+    const router = useRouter();
+    const IP_URL = Constants.expoConfig.extra.IP_URL;
+    const { user, isAuthenticated, logoutUser, watchList } = useUser();
 
-    const router = useRouter()
-    const IP_URL = Constants.expoConfig.extra.IP_URL
-    const { user, isAuthenticated, logoutUser } = useUser()
+    const [seriesList, setSeriesList] = useState([]);
+    const [searchQuery, setSearchQuery] = useState("");
+    const [selectedYear, setSelectedYear] = useState("");
+    const [selectedGenre, setSelectedGenre] = useState("");
+    const [showAdvancedSearch, setShowAdvancedSearch] = useState(false);
+    const [watchedSeries, setWatchedSeries] = useState([]);
+    const [lastWatchedBySeries, setLastWatchedBySeries] = useState({});
 
-    const [seriesList, setSeriesList] = useState([])
+
+    const [years, setYears] = useState([]);
+    const [genres, setGenres] = useState([]);
+    const [recentSeries, setRecentSeries] = useState([]);
+    const [comedySeries, setComedySeries] = useState([]);
+    const [dramaSeries, setDramaSeries] = useState([]);
+
+    useEffect(() => {
+        getSeries();
+        if (isAuthenticated && user) {
+            getWatchedSeries(user._id);
+        }
+    }, [user, watchList]);
+
+
     async function getSeries() {
         try {
-            const seriesDate = await axios.get(`http://${IP_URL}:3000/series`);
-            setSeriesList(seriesDate.data);
-        } catch (err) {
-            console.log("error");
-        }
+            const response = await axios.get(`http://${IP_URL}:3000/series`);
+            const data = response.data;
+            setSeriesList(data);
 
+            const currentYear = new Date().getFullYear();
+
+            setYears([...new Set(data.map((s) => s.year).filter(Boolean))].sort((a, b) => b - a));
+
+            const allGenres = data.flatMap((s) => s.genre || []);
+            setGenres([...new Set(allGenres)]);
+
+            setRecentSeries(data.filter((s) => Number(s.year) >= currentYear - 1));
+            setComedySeries(data.filter((s) => s.genre?.map((g) => g.toLowerCase()).includes("comedy")));
+            setDramaSeries(data.filter((s) => s.genre?.map((g) => g.toLowerCase()).includes("drama")));
+        } catch (err) {
+            console.log("Error fetching series:", err);
+        }
     }
-    useEffect(() => {
-        getSeries()
-    }, [])
+
+    const filteredSeries = seriesList.filter((s) => {
+        const matchesTitle = s.title.toLowerCase().includes(searchQuery.toLowerCase());
+        const matchesYear = selectedYear ? s.year?.toString() === selectedYear : true;
+        const matchesGenre = selectedGenre ? s.genre?.includes(selectedGenre) : true;
+        return matchesTitle && matchesYear && matchesGenre;
+    });
+
+    async function getWatchedSeries(userId) {
+        try {
+            const results = await Promise.all(
+                watchList.map(ep =>
+                    axios.get(`http://${IP_URL}:3000/episodes/${ep.episodeId}`)
+                )
+            );
+            const episodeData = results.map(res => res.data);
+            const allSeriesData = await axios.get(`http://${IP_URL}:3000/series`);
+            const allSeries = allSeriesData.data;
+            const seriesIds = [...new Set(episodeData.map(ep => ep.seriesId))]
+            const filterSeries = allSeries.filter(s => seriesIds.includes(s._id))
+            setWatchedSeries(filterSeries);
+            const episodesBySeries = {};
+            episodeData.forEach(ep => {
+                if (!episodesBySeries[ep.seriesId]) {
+                    episodesBySeries[ep.seriesId] = [];
+                }
+                episodesBySeries[ep.seriesId].push(ep);
+            });
+            const lastWatchedBySeries = {};
+            for (const seriesId in episodesBySeries) {
+                lastWatchedBySeries[seriesId] = findLastEpisode(episodesBySeries[seriesId]);
+            }
+            setLastWatchedBySeries(lastWatchedBySeries);
+
+        } catch (err) {
+            console.log("Error fetching watched series:", err);
+        }
+    }
+
+    function findLastEpisode(episodes) {
+        return episodes.reduce((latest, current) => {
+            if (
+                current.seasonNum > latest.seasonNum ||
+                (current.seasonNum === latest.seasonNum &&
+                    current.episodeNum > latest.episodeNum)
+            ) {
+                return current;
+            }
+            return latest;
+        }, episodes[0]);
+    }
+
+
+
 
     return (
-        <SafeAreaView>
-            <ScrollView>
-                {
-                    isAuthenticated ? <Text>connected as{user.userName}</Text> : <Text>Guest</Text>
-                }
-                {
-                    isAuthenticated ? <View> <UserFormat user={user} /> <Button title="log out" onPress={() => logoutUser()} /></View> : <Button title="login" onPress={() => router.push("/loginPage")} />
-                }
+        <SafeAreaView style={{ flex: 1 }}>
+            <KeyboardAvoidingView
+                behavior={Platform.OS === "ios" ? "padding" : "height"}
+                style={{ flex: 1 }}
+            >
+                <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                    <ScrollView
+                        contentContainerStyle={{ padding: 10 }}
+                        keyboardShouldPersistTaps="handled"
+                    >
+                        <View
+                            style={{
+                                flexDirection: "row",
+                                justifyContent: "space-between",
+                                alignItems: "center",
+                                marginBottom: 10,
+                            }}
+                        >
+                            {isAuthenticated && <UserFormat user={user} />}
+                            {isAuthenticated && <Button title="Log out" onPress={logoutUser} />}
+                            {!isAuthenticated && (
+                                <Button title="Login" onPress={() => router.push("/loginPage")} />
+                            )}
+                        </View>
 
-                {
-                    seriesList.map((s, index) => (<SeriesFormat key={index} series={s} />))
-                }
-            </ScrollView>
+                        <View style={{ alignSelf: "flex-start", marginBottom: 10 }}>
+                            <Button
+                                title={showAdvancedSearch ? "Back" : "Advanced Search"}
+                                onPress={() => {
+                                    setShowAdvancedSearch((prev) => !prev);
+                                    setSearchQuery("");
+                                    setSelectedYear("");
+                                    setSelectedGenre("");
+                                }}
+                            />
+                        </View>
+
+                        {showAdvancedSearch ? (
+                            <>
+                                <TextInput
+                                    placeholder="Search by title"
+                                    value={searchQuery}
+                                    onChangeText={setSearchQuery}
+                                    style={{
+                                        borderWidth: 1,
+                                        borderColor: "#ccc",
+                                        padding: 8,
+                                        borderRadius: 8,
+                                        marginBottom: 10,
+                                    }}
+                                />
+
+                                <View
+                                    style={{
+                                        flexDirection: "row",
+                                        justifyContent: "space-between",
+                                        gap: 10,
+                                        marginBottom: 10,
+                                    }}
+                                >
+                                    <View style={{ flex: 1 }}>
+                                        <Text>Year</Text>
+                                        <Picker
+                                            selectedValue={selectedYear}
+                                            onValueChange={setSelectedYear}
+                                        >
+                                            <Picker.Item label="All" value="" />
+                                            {years.map((year) => (
+                                                <Picker.Item
+                                                    key={year}
+                                                    label={year.toString()}
+                                                    value={year.toString()}
+                                                />
+                                            ))}
+                                        </Picker>
+                                    </View>
+
+                                    <View style={{ flex: 1 }}>
+                                        <Text>Genre</Text>
+                                        <Picker
+                                            selectedValue={selectedGenre}
+                                            onValueChange={setSelectedGenre}
+                                        >
+                                            <Picker.Item label="All" value="" />
+                                            {genres.map((genre) => (
+                                                <Picker.Item key={genre} label={genre} value={genre} />
+                                            ))}
+                                        </Picker>
+                                    </View>
+                                </View>
+
+                                <Text style={{ fontWeight: "bold", fontSize: 16, marginVertical: 10 }}>
+                                    Search Results
+                                </Text>
+                                <FlatList
+                                    data={filteredSeries}
+                                    keyExtractor={(item) => item._id?.toString() ?? item.title}
+                                    renderItem={({ item }) => (
+                                        <View
+                                            style={{
+                                                width: (Dimensions.get("window").width - 40) / 3,
+                                                marginBottom: 15,
+                                            }}
+                                        >
+                                            <SeriesFormat series={item} />
+                                        </View>
+                                    )}
+                                    numColumns={3}
+                                    columnWrapperStyle={{ justifyContent: "space-between" }}
+                                />
+                            </>
+                        ) : (
+                            <>
+                                {isAuthenticated && Object.keys(lastWatchedBySeries).length > 0 && (
+                                    <>
+                                        <Text style={{ fontWeight: 'bold', fontSize: 16, marginVertical: 10 }}>
+                                            Continue Watching
+                                        </Text>
+                                        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginBottom: 20 }}>
+                                            {Object.entries(lastWatchedBySeries).map(([seriesId, lastEpisode]) => {
+                                                const series = seriesList.find(s => s._id === seriesId);
+                                                if (!series) return null;
+
+                                                return (
+                                                    <View key={seriesId} style={{ marginRight: 10 }}>
+                                                        <SeriesFormat
+                                                            series={series}
+                                                            lastWatchedEpisode={lastEpisode}
+                                                        />
+                                                    </View>
+                                                );
+                                            })}
+                                        </ScrollView>
+
+                                    </>
+                                )}
+
+
+                                <Text style={{ fontWeight: "bold", fontSize: 16, marginVertical: 10 }}>
+                                    Recent Releases
+                                </Text>
+                                <ScrollView
+                                    horizontal
+                                    showsHorizontalScrollIndicator={false}
+                                    style={{ marginBottom: 20 }}
+                                >
+                                    {recentSeries.map((s, index) => (
+                                        <View key={s._id || index} style={{ marginRight: 10 }}>
+                                            <SeriesFormat series={s} />
+                                        </View>
+                                    ))}
+                                </ScrollView>
+
+                                <Text style={{ fontWeight: "bold", fontSize: 16, marginVertical: 10 }}>
+                                    Comedy
+                                </Text>
+                                <ScrollView
+                                    horizontal
+                                    showsHorizontalScrollIndicator={false}
+                                    style={{ marginBottom: 20 }}
+                                >
+                                    {comedySeries.map((s, index) => (
+                                        <View key={s._id || index} style={{ marginRight: 10 }}>
+                                            <SeriesFormat series={s} />
+                                        </View>
+                                    ))}
+                                </ScrollView>
+
+                                <Text style={{ fontWeight: "bold", fontSize: 16, marginVertical: 10 }}>
+                                    Drama
+                                </Text>
+                                <ScrollView
+                                    horizontal
+                                    showsHorizontalScrollIndicator={false}
+                                    style={{ marginBottom: 20 }}
+                                >
+                                    {dramaSeries.map((s, index) => (
+                                        <View key={s._id || index} style={{ marginRight: 10 }}>
+                                            <SeriesFormat series={s} />
+                                        </View>
+                                    ))}
+                                </ScrollView>
+                            </>
+                        )}
+                    </ScrollView>
+                </TouchableWithoutFeedback>
+            </KeyboardAvoidingView>
         </SafeAreaView>
-    )
-
+    );
 }
