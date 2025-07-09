@@ -1,16 +1,28 @@
 import { useLocalSearchParams } from "expo-router";
 import axios from "axios"
 import { useState, useEffect, } from "react";
-import { Button, SafeAreaView, Text, TextInput, Alert, ScrollView } from "react-native";
+import { Button, SafeAreaView, Text, TextInput, Alert, ScrollView, Image, StyleSheet } from "react-native";
 import EpisodeFormat from "../components/EpisodeFormat";
 import Constants from 'expo-constants';
+import { Picker } from '@react-native-picker/picker';
 
 export default function seriesPage() {
     const IP_URL = Constants.expoConfig.extra.IP_URL
-    const { seriesPage, startSeason } = useLocalSearchParams();
+    const { seriesPage, startSeason, seriesID } = useLocalSearchParams();
     const [episodes, setEpisodes] = useState([])
+    const [series, setSeries] = useState([])
     const [seasonsAmount, setSeasonAmount] = useState(0);
     const [selectedSeason, setSelectedSeason] = useState(Number(startSeason) || 1);
+
+    async function getSeries() {
+        try {
+            const allSeries = await axios.get(`http://${IP_URL}:3000/series`);
+            const findSeries = allSeries.data.find(se => se._id === seriesID);
+            setSeries(findSeries.data);
+        } catch (err) {
+            console.error(err.message);
+        }
+    }
     async function getEpisodes() {
         try {
             const episodesData = await axios.get(`http://${IP_URL}:3000/episodes?seriesId=${seriesPage}`);
@@ -22,9 +34,7 @@ export default function seriesPage() {
 
     async function getSeasonAmount() {
         try {
-            const series = await axios.get(`http://${IP_URL}:3000/series`);
-            const findSeries = series.data.find(se => se._id === seriesPage);
-            if (findSeries) {
+            if (series) {
                 setSeasonAmount(findSeries.seasonsAmount)
             }
             else {
@@ -36,6 +46,7 @@ export default function seriesPage() {
     }
 
     useEffect(() => {
+        getSeries();
         getEpisodes();
         getSeasonAmount();
         setSelectedSeason(Number(startSeason) || 1);
@@ -45,15 +56,24 @@ export default function seriesPage() {
     return (
         <SafeAreaView>
             <ScrollView>
-                {
-                    seasonArray.map((_, index) => (
-                        <Button key={index}
-                            title={`Season: ${index + 1}`}
-                            onPress={() => {
-                                setSelectedSeason(index + 1);
-                            }} />
-                    ))
-                }
+                {}
+                <Image
+                    source={{ uri: series.image }}
+                    style={styles.image} />
+                <Text>{series.title}</Text>
+                <Picker
+                    selectedValue={selectedSeason}
+                    onValueChange={(itemValue) => setSelectedSeason(itemValue)}
+                    style={{ marginVertical: 10 }}
+                >
+                    {seasonArray.map((_, index) => (
+                        <Picker.Item
+                            key={index}
+                            label={`Season: ${index + 1}`}
+                            value={index + 1}
+                        />
+                    ))}
+                </Picker>
                 <Text>season {selectedSeason}</Text>
                 {filterEpisodes.length > 0 ? (
                     filterEpisodes.map((ep, index) => <EpisodeFormat key={index} episode={ep} />)
@@ -66,3 +86,11 @@ export default function seriesPage() {
     )
 
 }
+
+const styles = StyleSheet.create({
+    image: {
+        width: 100,
+        height: 100,
+        borderRadius: 8,
+    }
+});
