@@ -1,16 +1,24 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity, Button, Alert } from "react-native";
 import { useRouter } from "expo-router";
+import { useUser } from "../context/UserContext";
 export default function SeriesFormat({ series }) {
+  const { addToFavorites, isAuthenticated, favorites } = useUser();
+  const isFavorite = favorites.some(fav => fav.seriesId === series._id)
   if (!series) return null;
   const router = useRouter()
   return (
-    <TouchableOpacity onPress={()=> router.push(`seriesDetails/${series._id}`)}>
+    <TouchableOpacity onPress={() => router.push(`seriesDetails/${series._id}`)}>
       <View style={styles.card}>
         <Text style={styles.title}>{series.title}</Text>
         <Text style={styles.genre}>{series.genre}</Text>
         <Image
           source={{ uri: series.image }}
           style={styles.image} />
+        <TouchableOpacity style={styles.mark}
+          onPress={()=>  { isAuthenticated ? addToFavorites(series._id) : Alert.alert("log in first") }}>
+          <Text>{!isFavorite ? "👁️" : "🚫"}</Text>
+        </TouchableOpacity>
+       
       </View>
     </TouchableOpacity>
 
@@ -26,7 +34,7 @@ const styles = StyleSheet.create({
     shadowColor: "#000",
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 2,   
+    elevation: 2,
   },
   title: {
     fontSize: 18,
@@ -42,5 +50,12 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     borderRadius: 8,
+  },
+  mark: {
+    height: 28,
+    width: 28,
+    borderRadius: 14,
+    justifyContent: "center",
+    alignItems: "center"
   }
 });

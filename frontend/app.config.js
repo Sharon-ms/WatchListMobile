@@ -15,6 +15,20 @@ export default {
       backgroundColor: "#ffffff"
     },
     ios: {
+      infoPlist: {
+        NSCameraUsageDescription: "אנחנו צריכים להשתמש במצלמה כדי לצלם תמונות",
+        NSPhotoLibraryUsageDescription: "אנחנו צריכים גישה לגלריה כדי להעלות תמונות",
+      }
+    },
+    android: {
+      permissions: [
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE"
+      ]
+    },
+
+    ios: {
       supportsTablet: true
     },
     android: {

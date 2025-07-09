@@ -78,10 +78,34 @@ async function deleteUser(req, res) {
     }
 }
 
+async function updateUserPhoto(req, res) {
+    try {
+        const { userName } = req.params;
+        const { photo } = req.body;
+
+        const updatedUser = await usersModel.findOneAndUpdate(
+            { userName },
+            { photo },
+            { new: true }
+        );
+
+        if (!updatedUser) {
+            return res.status(404).send("user not found");
+        }
+
+        res.status(200).send("photo updated");
+    } catch (err) {
+        console.log(err.message);
+        res.status(500).send(err.message);
+    }
+}
+
+
 module.exports = {
     sighnUp,
     getAllUsers,
     getUserById,
     updateUserPassword,
-    deleteUser
+    deleteUser,
+    updateUserPhoto
 }
