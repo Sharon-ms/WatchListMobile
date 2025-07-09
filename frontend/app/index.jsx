@@ -348,13 +348,14 @@ import SeriesFormat from "./components/SeriesFormat";
 export default function HomePage() {
     const router = useRouter();
     const IP_URL = Constants.expoConfig.extra.IP_URL;
-    const { user, isAuthenticated, logoutUser } = useUser();
+    const { user, isAuthenticated, logoutUser, watchList } = useUser();
 
     const [seriesList, setSeriesList] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedYear, setSelectedYear] = useState("");
     const [selectedGenre, setSelectedGenre] = useState("");
     const [showAdvancedSearch, setShowAdvancedSearch] = useState(false);
+    const [watchedSeries, setWatchedSeries] = useState([]);
 
     const [years, setYears] = useState([]);
     const [genres, setGenres] = useState([]);
@@ -364,7 +365,11 @@ export default function HomePage() {
 
     useEffect(() => {
         getSeries();
-    }, []);
+        if (isAuthenticated) {
+            getWatchedSeries(user._id);
+        }
+    }, [user]);
+
 
     async function getSeries() {
         try {
@@ -393,6 +398,26 @@ export default function HomePage() {
         const matchesGenre = selectedGenre ? s.genre?.includes(selectedGenre) : true;
         return matchesTitle && matchesYear && matchesGenre;
     });
+
+    async function getWatchedSeries(userId) {
+        try {
+            const results = await Promise.all(
+                watchList.map(ep =>
+                    axios.get(`http://${IP_URL}:3000/episodes/${ep.episodeId}`)
+                )
+            );
+            const episodeData = results.map(res => res.data);
+            const allSeriesData = await axios.get(`http://${IP_URL}:3000/series`);
+            const allSeries = allSeriesData.data;
+            const seriesIds = [...new Set(episodeData.map(ep => ep.seriesId))]
+            const filterSeries = allSeries.filter(s => seriesIds.includes(s._id))
+            setWatchedSeries(filterSeries);
+        } catch (err) {
+            console.log("Error fetching watched series:", err);
+        }
+    }
+
+
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
@@ -508,6 +533,19 @@ export default function HomePage() {
                             </>
                         ) : (
                             <>
+                                {isAuthenticated && watchedSeries.length > 0 && (
+                                    <>
+                                        <Text style={{ fontWeight: 'bold', fontSize: 16, marginVertical: 10 }}>Continue watching</Text>
+                                        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginBottom: 20 }}>
+                                            {watchedSeries.map((s, index) => (
+                                                <View key={s._id || index} style={{ marginRight: 10 }}>
+                                                    <SeriesFormat series={s} />
+                                                </View>
+                                            ))}
+                                        </ScrollView>
+                                    </>
+                                )}
+
                                 <Text style={{ fontWeight: "bold", fontSize: 16, marginVertical: 10 }}>
                                     Recent Releases
                                 </Text>
