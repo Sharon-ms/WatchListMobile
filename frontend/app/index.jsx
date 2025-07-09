@@ -356,6 +356,8 @@ export default function HomePage() {
     const [selectedGenre, setSelectedGenre] = useState("");
     const [showAdvancedSearch, setShowAdvancedSearch] = useState(false);
     const [watchedSeries, setWatchedSeries] = useState([]);
+    const [lastWatchedBySeries, setLastWatchedBySeries] = useState({});
+
 
     const [years, setYears] = useState([]);
     const [genres, setGenres] = useState([]);
@@ -365,10 +367,10 @@ export default function HomePage() {
 
     useEffect(() => {
         getSeries();
-        if (isAuthenticated) {
+        if (isAuthenticated && user) {
             getWatchedSeries(user._id);
         }
-    }, [user]);
+    }, [user, watchList]);
 
 
     async function getSeries() {
@@ -412,10 +414,37 @@ export default function HomePage() {
             const seriesIds = [...new Set(episodeData.map(ep => ep.seriesId))]
             const filterSeries = allSeries.filter(s => seriesIds.includes(s._id))
             setWatchedSeries(filterSeries);
+            const episodesBySeries = {};
+            episodeData.forEach(ep => {
+                if (!episodesBySeries[ep.seriesId]) {
+                    episodesBySeries[ep.seriesId] = [];
+                }
+                episodesBySeries[ep.seriesId].push(ep);
+            });
+            const lastWatchedBySeries = {};
+            for (const seriesId in episodesBySeries) {
+                lastWatchedBySeries[seriesId] = findLastEpisode(episodesBySeries[seriesId]);
+            }
+            setLastWatchedBySeries(lastWatchedBySeries);
+
         } catch (err) {
             console.log("Error fetching watched series:", err);
         }
     }
+
+    function findLastEpisode(episodes) {
+        return episodes.reduce((latest, current) => {
+            if (
+                current.seasonNum > latest.seasonNum ||
+                (current.seasonNum === latest.seasonNum &&
+                    current.episodeNum > latest.episodeNum)
+            ) {
+                return current;
+            }
+            return latest;
+        }, episodes[0]);
+    }
+
 
 
 
@@ -533,18 +562,30 @@ export default function HomePage() {
                             </>
                         ) : (
                             <>
-                                {isAuthenticated && watchedSeries.length > 0 && (
+                                {isAuthenticated && Object.keys(lastWatchedBySeries).length > 0 && (
                                     <>
-                                        <Text style={{ fontWeight: 'bold', fontSize: 16, marginVertical: 10 }}>Continue watching</Text>
+                                        <Text style={{ fontWeight: 'bold', fontSize: 16, marginVertical: 10 }}>
+                                            Continue Watching
+                                        </Text>
                                         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginBottom: 20 }}>
-                                            {watchedSeries.map((s, index) => (
-                                                <View key={s._id || index} style={{ marginRight: 10 }}>
-                                                    <SeriesFormat series={s} />
-                                                </View>
-                                            ))}
+                                            {Object.entries(lastWatchedBySeries).map(([seriesId, lastEpisode]) => {
+                                                const series = seriesList.find(s => s._id === seriesId);
+                                                if (!series) return null;
+
+                                                return (
+                                                    <View key={seriesId} style={{ marginRight: 10 }}>
+                                                        <SeriesFormat
+                                                            series={series}
+                                                            lastWatchedEpisode={lastEpisode}
+                                                        />
+                                                    </View>
+                                                );
+                                            })}
                                         </ScrollView>
+
                                     </>
                                 )}
+
 
                                 <Text style={{ fontWeight: "bold", fontSize: 16, marginVertical: 10 }}>
                                     Recent Releases
